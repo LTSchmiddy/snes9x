@@ -276,6 +276,10 @@
     <ClInclude Include="image_functions.h">
       <Filter>GUI\VideoDriver</Filter>
     </ClInclude>
+    <ClInclude Include="ModScripts\Utilities.h" />
+    <ClInclude Include="ModScripts\NewControls.h" />
+    <ClInclude Include="ModScripts\NewGamePlus.h" />
+    <ClInclude Include="ModScripts\SMMods.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\bsx.cpp">
@@ -593,6 +597,10 @@
     <ClCompile Include="image_functions.cpp">
       <Filter>GUI\VideoDriver</Filter>
     </ClCompile>
+    <ClCompile Include="ModScripts\Utilities.cpp" />
+    <ClCompile Include="ModScripts\NewControls.cpp" />
+    <ClCompile Include="ModScripts\NewGamePlus.cpp" />
+    <ClCompile Include="ModScripts\SMMods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="rsrc\nodrop.cur">

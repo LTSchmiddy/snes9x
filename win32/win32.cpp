@@ -397,6 +397,16 @@ const char *S9xGetDirectory (enum s9x_getdirtype dirtype)
 	return path;
 }
 
+// Added By Alex
+const char *S9xGetFileInDirectory(const char *e, enum s9x_getdirtype dirtype)
+{
+	static char path[PATH_MAX] = { 0 };
+	strncpy(path, _tToChar(S9xGetDirectoryT(dirtype)), PATH_MAX - 1);
+	strcat(path, "\\");
+	strcat(path, e);
+	return path;
+}
+
 const char *S9xGetFilenameInc (const char *e, enum s9x_getdirtype dirtype)
 {
     static char filename [PATH_MAX + 1];

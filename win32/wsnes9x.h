@@ -640,4 +640,7 @@ bool GetFilterHiResSupport(RenderFilter filterID);
 const TCHAR * S9xGetDirectoryT (enum s9x_getdirtype);
 RECT GetWindowMargins(HWND hwnd, UINT width);
 
+void DoQuit(void);
+
+//bool DoNotQuit;
 #endif // !defined(SNES9X_H_INCLUDED)

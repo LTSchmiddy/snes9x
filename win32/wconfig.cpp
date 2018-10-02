@@ -940,7 +940,8 @@ void WinRegisterConfigItems()
 	AddUInt("Fullscreen:Depth", GUI.FullscreenMode.depth, 16);
 	AddUInt("Fullscreen:RefreshRate", GUI.FullscreenMode.rate, 60);
 	AddBool("Fullscreen:DoubleBuffered", GUI.DoubleBuffered, false);
-	AddBoolC("Fullscreen:EmulateFullscreen", GUI.EmulateFullscreen, true,"true makes snes9x create a window that spans the entire screen when going fullscreen");
+	AddBoolC("Fullscreen:EmulateFullscreen", GUI.EmulateFullscreen, true,"true makes Super Metroid - PC Edition create a window that spans the entire screen when going fullscreen");
+	//AddBoolC("Fullscreen:EmulateFullscreen", GUI.EmulateFullscreen, true,"true makes snes9x create a window that spans the entire screen when going fullscreen");
 	AddBoolC("HideMenu", GUI.HideMenu, false, "true to auto-hide the menu bar on startup.");
 	AddBoolC("Vsync", GUI.Vsync, false, "true to enable Vsync");
 	AddBoolC("ReduceInputLag", GUI.ReduceInputLag, false, "true to reduce input lag by hard synchronization");

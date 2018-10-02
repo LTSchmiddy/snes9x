@@ -194,7 +194,8 @@
 
 /* This is where all the GUI text strings will eventually end up */
 
-#define WINDOW_TITLE TEXT("Snes9X v%s for Windows")
+#define WINDOW_TITLE TEXT("Super Metroid - PC Edition")
+//#define WINDOW_TITLE TEXT("Snes9X v%s for Windows")
 
 // the windows registry is no longer used
 //#define MY_REG_KEY   "Software\\Emulators\\Snes9X"
@@ -239,6 +240,11 @@ Nintendo is a trade mark.")
 #define INPUTCONFIG_LABEL_DOWN TEXT("Down")
 #define INPUTCONFIG_LABEL_LEFT TEXT("Left")
 #define INPUTCONFIG_LABEL_RIGHT TEXT("Right")
+
+//I added these
+//#define INPUTCONFIG_LABEL_UNUSED TEXT("**")
+
+
 #define INPUTCONFIG_LABEL_A TEXT("A")
 #define INPUTCONFIG_LABEL_B TEXT("B")
 #define INPUTCONFIG_LABEL_X TEXT("X")

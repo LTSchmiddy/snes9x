@@ -214,6 +214,7 @@
 #include <dbt.h>
 
 #include "wsnes9x.h"
+#include "ModScripts/SMMods.h"
 #include "win32_sound.h"
 #include "win32_display.h"
 #include "CCGShader.h"
@@ -293,6 +294,9 @@ INT_PTR CALLBACK DlgCheatSearchAdd(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 INT_PTR CALLBACK DlgCreateMovie(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK DlgOpenMovie(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT CALLBACK EnumModesCallback( LPDDSURFACEDESC lpDDSurfaceDesc, LPVOID lpContext);
+
+void SetInputUIText(HWND hDlg, int input);
+
 int WinSearchCheatDatabase();
 
 VOID CALLBACK HotkeyTimer( UINT idEvent, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
@@ -345,6 +349,12 @@ HINSTANCE g_hInst;
 #ifdef DEBUGGER
 #include "../debug.h"
 #endif
+
+bool DoNotQuit = true;
+
+void DoQuit() {
+	DoNotQuit = false;
+}
 
 struct SJoypad Joypad[16] = {
     {
@@ -633,6 +643,10 @@ struct OpenMovieParams
 	uint8 SyncFlags;
 	wchar_t Metadata[MOVIE_MAX_METADATA];
 };
+
+
+//Added by Alex:
+int specialCommandsController = 2;
 
 
 
@@ -1423,16 +1437,29 @@ int HandleKeyMessage(WPARAM wParam, LPARAM lParam)
 	if(!hitHotKey)
 	switch (wParam)
 	{
+
+		// HANDLING MENU BAR!! Come back to this:
 		case VK_ESCAPE:
 			if(
                 GUI.outputMethod!=DIRECTDRAW &&
                 GUI.FullScreen && !GUI.EmulateFullscreen)
 				ToggleFullScreen();
 			else
-				if (GetMenu (GUI.hWnd) == NULL)
-					SetMenu (GUI.hWnd, GUI.hMenu);
-				else
-					SetMenu (GUI.hWnd, NULL);
+				if (GetMenu(GUI.hWnd) == NULL) {
+					SetMenu(GUI.hWnd, GUI.hMenu);
+
+					Settings.Paused = true;
+					Settings.FrameAdvance = false;
+					GUI.FrameAdvanceJustPressed = 0;
+				}					
+				else {
+					SetMenu(GUI.hWnd, NULL);
+
+					Settings.Paused = false;
+					Settings.FrameAdvance = false;
+					GUI.FrameAdvanceJustPressed = 0;
+				}
+
 
 			//UpdateBackBuffer();
 			if (GetMenu( GUI.hWnd) != NULL)
@@ -3264,102 +3291,102 @@ void S9xSetupDefaultKeymap(void)
 	ASSIGN_BUTTONf(kWinCMapPad5PX,         "Joypad5 X");
 	ASSIGN_BUTTONf(kWinCMapPad5PA,         "Joypad5 A");
 	ASSIGN_BUTTONf(kWinCMapPad5PB,         "Joypad5 B");
-	ASSIGN_BUTTONf(kWinCMapPad5PY,         "Joypad5 Y");
-	ASSIGN_BUTTONf(kWinCMapPad5PL,         "Joypad5 L");
-	ASSIGN_BUTTONf(kWinCMapPad5PR,         "Joypad5 R");
-	ASSIGN_BUTTONf(kWinCMapPad5PSelect,    "Joypad5 Select");
-	ASSIGN_BUTTONf(kWinCMapPad5PStart,     "Joypad5 Start");
-	ASSIGN_BUTTONf(kWinCMapPad5PUp,        "Joypad5 Up");
-	ASSIGN_BUTTONf(kWinCMapPad5PDown,      "Joypad5 Down");
-	ASSIGN_BUTTONf(kWinCMapPad5PLeft,      "Joypad5 Left");
-	ASSIGN_BUTTONf(kWinCMapPad5PRight,     "Joypad5 Right");
+ASSIGN_BUTTONf(kWinCMapPad5PY, "Joypad5 Y");
+ASSIGN_BUTTONf(kWinCMapPad5PL, "Joypad5 L");
+ASSIGN_BUTTONf(kWinCMapPad5PR, "Joypad5 R");
+ASSIGN_BUTTONf(kWinCMapPad5PSelect, "Joypad5 Select");
+ASSIGN_BUTTONf(kWinCMapPad5PStart, "Joypad5 Start");
+ASSIGN_BUTTONf(kWinCMapPad5PUp, "Joypad5 Up");
+ASSIGN_BUTTONf(kWinCMapPad5PDown, "Joypad5 Down");
+ASSIGN_BUTTONf(kWinCMapPad5PLeft, "Joypad5 Left");
+ASSIGN_BUTTONf(kWinCMapPad5PRight, "Joypad5 Right");
 
-	ASSIGN_BUTTONf(kWinCMapPad6PX,         "Joypad6 X");
-	ASSIGN_BUTTONf(kWinCMapPad6PA,         "Joypad6 A");
-	ASSIGN_BUTTONf(kWinCMapPad6PB,         "Joypad6 B");
-	ASSIGN_BUTTONf(kWinCMapPad6PY,         "Joypad6 Y");
-	ASSIGN_BUTTONf(kWinCMapPad6PL,         "Joypad6 L");
-	ASSIGN_BUTTONf(kWinCMapPad6PR,         "Joypad6 R");
-	ASSIGN_BUTTONf(kWinCMapPad6PSelect,    "Joypad6 Select");
-	ASSIGN_BUTTONf(kWinCMapPad6PStart,     "Joypad6 Start");
-	ASSIGN_BUTTONf(kWinCMapPad6PUp,        "Joypad6 Up");
-	ASSIGN_BUTTONf(kWinCMapPad6PDown,      "Joypad6 Down");
-	ASSIGN_BUTTONf(kWinCMapPad6PLeft,      "Joypad6 Left");
-	ASSIGN_BUTTONf(kWinCMapPad6PRight,     "Joypad6 Right");
+ASSIGN_BUTTONf(kWinCMapPad6PX, "Joypad6 X");
+ASSIGN_BUTTONf(kWinCMapPad6PA, "Joypad6 A");
+ASSIGN_BUTTONf(kWinCMapPad6PB, "Joypad6 B");
+ASSIGN_BUTTONf(kWinCMapPad6PY, "Joypad6 Y");
+ASSIGN_BUTTONf(kWinCMapPad6PL, "Joypad6 L");
+ASSIGN_BUTTONf(kWinCMapPad6PR, "Joypad6 R");
+ASSIGN_BUTTONf(kWinCMapPad6PSelect, "Joypad6 Select");
+ASSIGN_BUTTONf(kWinCMapPad6PStart, "Joypad6 Start");
+ASSIGN_BUTTONf(kWinCMapPad6PUp, "Joypad6 Up");
+ASSIGN_BUTTONf(kWinCMapPad6PDown, "Joypad6 Down");
+ASSIGN_BUTTONf(kWinCMapPad6PLeft, "Joypad6 Left");
+ASSIGN_BUTTONf(kWinCMapPad6PRight, "Joypad6 Right");
 
-	ASSIGN_BUTTONf(kWinCMapPad7PX,         "Joypad7 X");
-	ASSIGN_BUTTONf(kWinCMapPad7PA,         "Joypad7 A");
-	ASSIGN_BUTTONf(kWinCMapPad7PB,         "Joypad7 B");
-	ASSIGN_BUTTONf(kWinCMapPad7PY,         "Joypad7 Y");
-	ASSIGN_BUTTONf(kWinCMapPad7PL,         "Joypad7 L");
-	ASSIGN_BUTTONf(kWinCMapPad7PR,         "Joypad7 R");
-	ASSIGN_BUTTONf(kWinCMapPad7PSelect,    "Joypad7 Select");
-	ASSIGN_BUTTONf(kWinCMapPad7PStart,     "Joypad7 Start");
-	ASSIGN_BUTTONf(kWinCMapPad7PUp,        "Joypad7 Up");
-	ASSIGN_BUTTONf(kWinCMapPad7PDown,      "Joypad7 Down");
-	ASSIGN_BUTTONf(kWinCMapPad7PLeft,      "Joypad7 Left");
-	ASSIGN_BUTTONf(kWinCMapPad7PRight,     "Joypad7 Right");
+ASSIGN_BUTTONf(kWinCMapPad7PX, "Joypad7 X");
+ASSIGN_BUTTONf(kWinCMapPad7PA, "Joypad7 A");
+ASSIGN_BUTTONf(kWinCMapPad7PB, "Joypad7 B");
+ASSIGN_BUTTONf(kWinCMapPad7PY, "Joypad7 Y");
+ASSIGN_BUTTONf(kWinCMapPad7PL, "Joypad7 L");
+ASSIGN_BUTTONf(kWinCMapPad7PR, "Joypad7 R");
+ASSIGN_BUTTONf(kWinCMapPad7PSelect, "Joypad7 Select");
+ASSIGN_BUTTONf(kWinCMapPad7PStart, "Joypad7 Start");
+ASSIGN_BUTTONf(kWinCMapPad7PUp, "Joypad7 Up");
+ASSIGN_BUTTONf(kWinCMapPad7PDown, "Joypad7 Down");
+ASSIGN_BUTTONf(kWinCMapPad7PLeft, "Joypad7 Left");
+ASSIGN_BUTTONf(kWinCMapPad7PRight, "Joypad7 Right");
 
-	ASSIGN_BUTTONf(kWinCMapPad8PX,         "Joypad8 X");
-	ASSIGN_BUTTONf(kWinCMapPad8PA,         "Joypad8 A");
-	ASSIGN_BUTTONf(kWinCMapPad8PB,         "Joypad8 B");
-	ASSIGN_BUTTONf(kWinCMapPad8PY,         "Joypad8 Y");
-	ASSIGN_BUTTONf(kWinCMapPad8PL,         "Joypad8 L");
-	ASSIGN_BUTTONf(kWinCMapPad8PR,         "Joypad8 R");
-	ASSIGN_BUTTONf(kWinCMapPad8PSelect,    "Joypad8 Select");
-	ASSIGN_BUTTONf(kWinCMapPad8PStart,     "Joypad8 Start");
-	ASSIGN_BUTTONf(kWinCMapPad8PUp,        "Joypad8 Up");
-	ASSIGN_BUTTONf(kWinCMapPad8PDown,      "Joypad8 Down");
-	ASSIGN_BUTTONf(kWinCMapPad8PLeft,      "Joypad8 Left");
-	ASSIGN_BUTTONf(kWinCMapPad8PRight,     "Joypad8 Right");
+ASSIGN_BUTTONf(kWinCMapPad8PX, "Joypad8 X");
+ASSIGN_BUTTONf(kWinCMapPad8PA, "Joypad8 A");
+ASSIGN_BUTTONf(kWinCMapPad8PB, "Joypad8 B");
+ASSIGN_BUTTONf(kWinCMapPad8PY, "Joypad8 Y");
+ASSIGN_BUTTONf(kWinCMapPad8PL, "Joypad8 L");
+ASSIGN_BUTTONf(kWinCMapPad8PR, "Joypad8 R");
+ASSIGN_BUTTONf(kWinCMapPad8PSelect, "Joypad8 Select");
+ASSIGN_BUTTONf(kWinCMapPad8PStart, "Joypad8 Start");
+ASSIGN_BUTTONf(kWinCMapPad8PUp, "Joypad8 Up");
+ASSIGN_BUTTONf(kWinCMapPad8PDown, "Joypad8 Down");
+ASSIGN_BUTTONf(kWinCMapPad8PLeft, "Joypad8 Left");
+ASSIGN_BUTTONf(kWinCMapPad8PRight, "Joypad8 Right");
 
-	ASSIGN_BUTTONt(kWinCMapMouse1PL,       "Mouse1 L");
-	ASSIGN_BUTTONt(kWinCMapMouse1PR,       "Mouse1 R");
-	ASSIGN_BUTTONt(kWinCMapMouse2PL,       "Mouse2 L");
-	ASSIGN_BUTTONt(kWinCMapMouse2PR,       "Mouse2 R");
+ASSIGN_BUTTONt(kWinCMapMouse1PL, "Mouse1 L");
+ASSIGN_BUTTONt(kWinCMapMouse1PR, "Mouse1 R");
+ASSIGN_BUTTONt(kWinCMapMouse2PL, "Mouse2 L");
+ASSIGN_BUTTONt(kWinCMapMouse2PR, "Mouse2 R");
 
-	ASSIGN_BUTTONt(kWinCMapScopeOffscreen, "Superscope AimOffscreen");
-	ASSIGN_BUTTONt(kWinCMapScopeFire,      "Superscope Fire");
-	ASSIGN_BUTTONt(kWinCMapScopeCursor,    "Superscope Cursor");
-	ASSIGN_BUTTONt(kWinCMapScopeTurbo,     "Superscope ToggleTurbo");
-	ASSIGN_BUTTONt(kWinCMapScopePause,     "Superscope Pause");
+ASSIGN_BUTTONt(kWinCMapScopeOffscreen, "Superscope AimOffscreen");
+ASSIGN_BUTTONt(kWinCMapScopeFire, "Superscope Fire");
+ASSIGN_BUTTONt(kWinCMapScopeCursor, "Superscope Cursor");
+ASSIGN_BUTTONt(kWinCMapScopeTurbo, "Superscope ToggleTurbo");
+ASSIGN_BUTTONt(kWinCMapScopePause, "Superscope Pause");
 
-	ASSIGN_BUTTONt(kWinCMapLGun1Offscreen, "Justifier1 AimOffscreen");
-	ASSIGN_BUTTONt(kWinCMapLGun1Trigger,   "Justifier1 Trigger");
-	ASSIGN_BUTTONt(kWinCMapLGun1Start,     "Justifier1 Start");
-	ASSIGN_BUTTONt(kWinCMapLGun2Offscreen, "Justifier2 AimOffscreen");
-	ASSIGN_BUTTONt(kWinCMapLGun2Trigger,   "Justifier2 Trigger");
-	ASSIGN_BUTTONt(kWinCMapLGun2Start,     "Justifier2 Start");
+ASSIGN_BUTTONt(kWinCMapLGun1Offscreen, "Justifier1 AimOffscreen");
+ASSIGN_BUTTONt(kWinCMapLGun1Trigger, "Justifier1 Trigger");
+ASSIGN_BUTTONt(kWinCMapLGun1Start, "Justifier1 Start");
+ASSIGN_BUTTONt(kWinCMapLGun2Offscreen, "Justifier2 AimOffscreen");
+ASSIGN_BUTTONt(kWinCMapLGun2Trigger, "Justifier2 Trigger");
+ASSIGN_BUTTONt(kWinCMapLGun2Start, "Justifier2 Start");
 
-	ASSIGN_BUTTONt(kWinCMapMacsRifleTrigger,  "MacsRifle Trigger");
+ASSIGN_BUTTONt(kWinCMapMacsRifleTrigger, "MacsRifle Trigger");
 
-	ASSIGN_POINTRt(kWinCMapMouse1Pointer,     "Pointer Mouse1");
-	ASSIGN_POINTRt(kWinCMapMouse2Pointer,     "Pointer Mouse2");
-	ASSIGN_POINTRt(kWinCMapSuperscopePointer, "Pointer Superscope");
-	ASSIGN_POINTRt(kWinCMapJustifier1Pointer, "Pointer Justifier1");
-	ASSIGN_POINTRt(kWinCMapMacsRiflePointer,  "Pointer MacsRifle");
+ASSIGN_POINTRt(kWinCMapMouse1Pointer, "Pointer Mouse1");
+ASSIGN_POINTRt(kWinCMapMouse2Pointer, "Pointer Mouse2");
+ASSIGN_POINTRt(kWinCMapSuperscopePointer, "Pointer Superscope");
+ASSIGN_POINTRt(kWinCMapJustifier1Pointer, "Pointer Justifier1");
+ASSIGN_POINTRt(kWinCMapMacsRiflePointer, "Pointer MacsRifle");
 
-	ASSIGN_POINTRf(PseudoPointerBase,         "Pointer Justifier2");
-	ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 0, "ButtonToPointer 1u Med");
-	ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 1, "ButtonToPointer 1d Med");
-	ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 2, "ButtonToPointer 1l Med");
-	ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 3, "ButtonToPointer 1r Med");
+ASSIGN_POINTRf(PseudoPointerBase, "Pointer Justifier2");
+ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 0, "ButtonToPointer 1u Med");
+ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 1, "ButtonToPointer 1d Med");
+ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 2, "ButtonToPointer 1l Med");
+ASSIGN_BUTTONf(kWinCMapPseudoPtrBase + 3, "ButtonToPointer 1r Med");
 }
 
 void ControlPadFlagsToS9xReportButtons(int n, uint32 p)
 {
 	uint32	base = k_HD | k_BT | k_JP | (0x100 << n);
 
-	S9xReportButton(base +  0, (p & 0x0040) != 0);
-	S9xReportButton(base +  1, (p & 0x0080) != 0);
-	S9xReportButton(base +  2, (p & 0x8000) != 0);
-	S9xReportButton(base +  3, (p & 0x4000) != 0);
-	S9xReportButton(base +  4, (p & 0x0020) != 0);
-	S9xReportButton(base +  5, (p & 0x0010) != 0);
-	S9xReportButton(base +  6, (p & 0x2000) != 0);
-	S9xReportButton(base +  7, (p & 0x1000) != 0);
-	S9xReportButton(base +  8, (p & 0x0800) != 0);
-	S9xReportButton(base +  9, (p & 0x0400) != 0);
+	S9xReportButton(base + 0, (p & 0x0040) != 0);
+	S9xReportButton(base + 1, (p & 0x0080) != 0);
+	S9xReportButton(base + 2, (p & 0x8000) != 0);
+	S9xReportButton(base + 3, (p & 0x4000) != 0);
+	S9xReportButton(base + 4, (p & 0x0020) != 0);
+	S9xReportButton(base + 5, (p & 0x0010) != 0);
+	S9xReportButton(base + 6, (p & 0x2000) != 0);
+	S9xReportButton(base + 7, (p & 0x1000) != 0);
+	S9xReportButton(base + 8, (p & 0x0800) != 0);
+	S9xReportButton(base + 9, (p & 0x0400) != 0);
 	S9xReportButton(base + 10, (p & 0x0200) != 0);
 	S9xReportButton(base + 11, (p & 0x0100) != 0);
 }
@@ -3407,6 +3434,10 @@ static void ProcessInput(void)
 /*****************************************************************************/
 void DeinitS9x(void);
 
+
+
+
+// APPLICATION ENTRY POINT!!::
 int WINAPI WinMain(
 				   HINSTANCE hInstance,
 				   HINSTANCE hPrevInstance,
@@ -3414,6 +3445,10 @@ int WINAPI WinMain(
 				   int nCmdShow)
 {
 	Settings.StopEmulation = TRUE;
+
+	const TCHAR *baseRom = TEXT("main.smc");
+	//const TCHAR *configMode = TEXT("Super Metroid (Vanilla).smc");
+
 
 	SetCurrentDirectory(S9xGetDirectoryT(DEFAULT_DIR));
 
@@ -3435,16 +3470,31 @@ int WINAPI WinMain(
     ChangeInputDevice();
 
     const TCHAR *rom_filename = WinParseCommandLineAndLoadConfigFile (GetCommandLine());
+
+	if (!rom_filename) {
+		rom_filename = baseRom;
+		printf("No Rom Filename Given. Using 'main.smc' by default.");
+	}
+
+
     WinSaveConfigFile ();
 	WinLockConfigFile ();
 
     ControllerOptionsFromControllers();
 
     WinInit (hInstance);
-	if(GUI.HideMenu)
-	{
-		SetMenu (GUI.hWnd, NULL);
+
+	if (rom_filename) {
+		printf("Forcing the Menu to Hide...\n");
+		SetMenu(GUI.hWnd, NULL);
 	}
+	else {
+		if (GUI.HideMenu) {
+			SetMenu(GUI.hWnd, NULL);
+		}
+	}
+
+	//GUI.hMenu
 
     DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
     ZeroMemory(&notificationFilter, sizeof(notificationFilter));
@@ -3464,9 +3514,19 @@ int WINAPI WinMain(
 	void InitSnes9X (void);
 	InitSnes9X ();
 
-	if(GUI.FullScreen) {
-		GUI.FullScreen = false;
-		ToggleFullScreen();
+	if (rom_filename) {
+		printf("Allowing jump straight to fullscreen!\n");
+		if (GUI.FullScreen) {
+			GUI.FullScreen = false;
+			ToggleFullScreen();
+		}
+	}
+	else {
+		if (GUI.FullScreen) {
+			GUI.FullScreen = false;
+			ToggleFullScreen();
+		}
+
 	}
 
     TIMECAPS tc;
@@ -3519,8 +3579,20 @@ int WINAPI WinMain(
 		}
 		else
 		{
-			LoadROM(rom_filename);
+			printf("Rom File: ");
+			_tprintf(rom_filename);
+			printf("\n");
+
+
+			if (!LoadROM(rom_filename)) {
+				SetMenu(GUI.hWnd, GUI.hMenu);
+				printf("Rom not found. Launching emulator without a rom.");
+			}
 		}
+	}
+
+	else {
+		//LoadROM(baseRom);
 	}
 
 	S9xUnmapAllControls();
@@ -3530,7 +3602,10 @@ int WINAPI WinMain(
 
     MSG msg;
 
-    while (TRUE)
+
+	// MAINLOOP (I think...) !!!!!:
+    while (DoNotQuit)
+    //while (TRUE)
     {
 		EnsureInputDisplayUpdated();
 
@@ -3662,8 +3737,10 @@ int WINAPI WinMain(
                             stateMan.push();
                     }
                 }
-
+				SMMainLoop();
 				S9xMainLoop();
+				SMMainLoop_Late();
+
 				GUI.FrameCount++;
 			}
 
@@ -3815,11 +3892,13 @@ void FreezeUnfreeze (const char *filename, bool8 freeze)
             S9xNPServerQueueSendingFreezeFile (filename);
 #endif
 //            UpdateBackBuffer();
+
         }
 
 		// fix next frame advance after loading non-skipping state from a skipping state
 			skipNextFrameStop = true;
     }
+	SMOnLoadState();
 
     S9xClearPause (PAUSE_FREEZE_FILE);
 }
@@ -7403,6 +7482,8 @@ void EnableDisableKeyFields (int index, HWND hDlg)
 		SetDlgItemText(hDlg,IDC_LABEL_LEFT,INPUTCONFIG_LABEL_LEFT);
 		SetDlgItemText(hDlg,IDC_LABEL_DOWN,INPUTCONFIG_LABEL_DOWN);
 		SetDlgItemText(hDlg,IDC_LABEL_DOWNLEFT,INPUTCONFIG_LABEL_DOWNLEFT);
+
+		SetInputUIText(hDlg, index);
 		enableUnTurboable = true;
 	}
 	else
@@ -7426,6 +7507,8 @@ void EnableDisableKeyFields (int index, HWND hDlg)
 	EnableWindow(GetDlgItem(hDlg,IDC_UPRIGHT), enableUnTurboable);
 	EnableWindow(GetDlgItem(hDlg,IDC_DWNRIGHT), enableUnTurboable);
 	EnableWindow(GetDlgItem(hDlg,IDC_DWNLEFT), enableUnTurboable);
+
+
 }
 
 void UpdateModeComboBox(HWND hComboBox)
@@ -8114,6 +8197,116 @@ INT_PTR CALLBACK DlgNPProgress(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	return false;
 }
 #endif
+
+void SetInputUIText(HWND hDlg, int input) {
+	SetWindowText(hDlg, INPUTCONFIG_TITLE);
+	SetDlgItemText(hDlg, IDC_JPTOGGLE, INPUTCONFIG_JPTOGGLE);
+	SetDlgItemText(hDlg, IDC_OK, BUTTON_OK);
+	SetDlgItemText(hDlg, IDC_CANCEL, BUTTON_CANCEL);
+	SetDlgItemText(hDlg, IDC_LABEL_BLUE, INPUTCONFIG_LABEL_BLUE);
+
+	if (input == 2) {
+		SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UNUSED);
+		//EnableWindow(GetDlgItem(hDlg, IDC_LABEL_UP), FALSE);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWN, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_LEFT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_A, TEXT("Select Missiles"));
+		SetDlgItemText(hDlg, IDC_LABEL_B, TEXT("Select Super Missiles"));
+		SetDlgItemText(hDlg, IDC_LABEL_X, TEXT("Select Beam"));
+		SetDlgItemText(hDlg, IDC_LABEL_Y, TEXT("Select Power Bombs"));
+		SetDlgItemText(hDlg, IDC_LABEL_L, TEXT("Select Grapple Beam"));
+		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Select X-Ray Scope"));
+		SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_UNUSED);
+
+	}
+	else if (input == 1) {
+		SetDlgItemText(hDlg, IDC_LABEL_UP, TEXT("Wave Beam Combo"));
+		SetDlgItemText(hDlg, IDC_LABEL_DOWN, TEXT("Ice Beam Combo"));
+		SetDlgItemText(hDlg, IDC_LABEL_LEFT, TEXT("Spazer Beam Combo"));
+		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, TEXT("Plasma Beam Combo"));
+		SetDlgItemText(hDlg, IDC_LABEL_A, TEXT("Quick-Fire Grapple Beam"));
+		SetDlgItemText(hDlg, IDC_LABEL_B, TEXT("Quick-Fire Missiles"));
+		SetDlgItemText(hDlg, IDC_LABEL_X, TEXT("Quick-Fire X-Ray Scope"));
+		SetDlgItemText(hDlg, IDC_LABEL_Y, TEXT("Quick-Fire Super Missiles"));
+		SetDlgItemText(hDlg, IDC_LABEL_L, TEXT("Quick-Fire Power Bombs"));
+		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Quick Morph Ball"));
+		SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_UNUSED);
+	}
+
+	else if (input == 0) {
+		SetDlgItemText(hDlg, IDC_LABEL_UP, TEXT("Aim Up / Stand"));
+		SetDlgItemText(hDlg, IDC_LABEL_DOWN, TEXT("Aim Down / Crouch"));
+		SetDlgItemText(hDlg, IDC_LABEL_LEFT, TEXT("Move Left"));
+		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, TEXT("Move Right"));
+		SetDlgItemText(hDlg, IDC_LABEL_A, TEXT("Jump"));
+		SetDlgItemText(hDlg, IDC_LABEL_B, TEXT("Run"));
+		SetDlgItemText(hDlg, IDC_LABEL_X, TEXT("Fire"));
+		SetDlgItemText(hDlg, IDC_LABEL_Y, TEXT("Item Cancel"));
+		SetDlgItemText(hDlg, IDC_LABEL_L, TEXT("Aim Diagonally Down"));
+		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Aim Diagonally Up"));
+		SetDlgItemText(hDlg, IDC_LABEL_START, TEXT("Show In-Game Menu"));
+		SetDlgItemText(hDlg, IDC_LABEL_SELECT, TEXT("Item Switch"));
+		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_UNUSED);
+	}
+	else {
+		SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UP);
+		//EnableWindow(GetDlgItem(hDlg, IDC_LABEL_UP), TRUE);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWN, INPUTCONFIG_LABEL_DOWN);
+		SetDlgItemText(hDlg, IDC_LABEL_LEFT, INPUTCONFIG_LABEL_LEFT);
+		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, INPUTCONFIG_LABEL_RIGHT);
+		SetDlgItemText(hDlg, IDC_LABEL_A, INPUTCONFIG_LABEL_A);
+		SetDlgItemText(hDlg, IDC_LABEL_B, INPUTCONFIG_LABEL_B);
+		SetDlgItemText(hDlg, IDC_LABEL_X, INPUTCONFIG_LABEL_X);
+		SetDlgItemText(hDlg, IDC_LABEL_Y, INPUTCONFIG_LABEL_Y);
+		SetDlgItemText(hDlg, IDC_LABEL_L, INPUTCONFIG_LABEL_L);
+		SetDlgItemText(hDlg, IDC_LABEL_R, INPUTCONFIG_LABEL_R);
+		SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_START);
+		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_SELECT);
+		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UPRIGHT);
+		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UPLEFT);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_DOWNRIGHT);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_DOWNLEFT);
+	}
+
+	//SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UP);
+	//SetDlgItemText(hDlg, IDC_LABEL_DOWN, INPUTCONFIG_LABEL_DOWN);
+	//SetDlgItemText(hDlg, IDC_LABEL_LEFT, INPUTCONFIG_LABEL_LEFT);
+	//SetDlgItemText(hDlg, IDC_LABEL_RIGHT, INPUTCONFIG_LABEL_RIGHT);
+	//SetDlgItemText(hDlg, IDC_LABEL_A, INPUTCONFIG_LABEL_A);
+	//SetDlgItemText(hDlg, IDC_LABEL_B, INPUTCONFIG_LABEL_B);
+	//SetDlgItemText(hDlg, IDC_LABEL_X, INPUTCONFIG_LABEL_X);
+	//SetDlgItemText(hDlg, IDC_LABEL_Y, INPUTCONFIG_LABEL_Y);
+	//SetDlgItemText(hDlg, IDC_LABEL_L, INPUTCONFIG_LABEL_L);
+	//SetDlgItemText(hDlg, IDC_LABEL_R, INPUTCONFIG_LABEL_R);
+	//SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_START);
+	//SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_SELECT);
+	//SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UPRIGHT);
+	//SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UPLEFT);
+	//SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_DOWNRIGHT);
+	//SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_DOWNLEFT);
+	//SetDlgItemText(hDlg, IDC_LABEL_BLUE, INPUTCONFIG_LABEL_BLUE);
+
+
+
+}
+
+
+
+
 INT_PTR CALLBACK DlgInputConfig(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR temp[256];
@@ -8140,26 +8333,8 @@ switch(msg)
 		return true;
 	case WM_INITDIALOG:
 		WinRefreshDisplay();
-		SetWindowText(hDlg,INPUTCONFIG_TITLE);
-		SetDlgItemText(hDlg,IDC_JPTOGGLE,INPUTCONFIG_JPTOGGLE);
-		SetDlgItemText(hDlg,IDC_OK,BUTTON_OK);
-		SetDlgItemText(hDlg,IDC_CANCEL,BUTTON_CANCEL);
-		SetDlgItemText(hDlg,IDC_LABEL_UP,INPUTCONFIG_LABEL_UP);
-		SetDlgItemText(hDlg,IDC_LABEL_DOWN,INPUTCONFIG_LABEL_DOWN);
-		SetDlgItemText(hDlg,IDC_LABEL_LEFT,INPUTCONFIG_LABEL_LEFT);
-		SetDlgItemText(hDlg,IDC_LABEL_A,INPUTCONFIG_LABEL_A);
-		SetDlgItemText(hDlg,IDC_LABEL_B,INPUTCONFIG_LABEL_B);
-		SetDlgItemText(hDlg,IDC_LABEL_X,INPUTCONFIG_LABEL_X);
-		SetDlgItemText(hDlg,IDC_LABEL_Y,INPUTCONFIG_LABEL_Y);
-		SetDlgItemText(hDlg,IDC_LABEL_L,INPUTCONFIG_LABEL_L);
-		SetDlgItemText(hDlg,IDC_LABEL_R,INPUTCONFIG_LABEL_R);
-		SetDlgItemText(hDlg,IDC_LABEL_START,INPUTCONFIG_LABEL_START);
-		SetDlgItemText(hDlg,IDC_LABEL_SELECT,INPUTCONFIG_LABEL_SELECT);
-		SetDlgItemText(hDlg,IDC_LABEL_UPRIGHT,INPUTCONFIG_LABEL_UPRIGHT);
-		SetDlgItemText(hDlg,IDC_LABEL_UPLEFT,INPUTCONFIG_LABEL_UPLEFT);
-		SetDlgItemText(hDlg,IDC_LABEL_DOWNRIGHT,INPUTCONFIG_LABEL_DOWNRIGHT);
-		SetDlgItemText(hDlg,IDC_LABEL_DOWNLEFT,INPUTCONFIG_LABEL_DOWNLEFT);
-		SetDlgItemText(hDlg,IDC_LABEL_BLUE,INPUTCONFIG_LABEL_BLUE);
+
+		//SetInputUIText(hDlg, 0);
 
 		for(i=5;i<10;i++)
 			Joypad[i].Left_Up = Joypad[i].Right_Up = Joypad[i].Left_Down = Joypad[i].Right_Down = 0;
@@ -8174,15 +8349,31 @@ switch(msg)
 
 		for(i=1;i<6;i++)
 		{
-			_stprintf(temp,INPUTCONFIG_JPCOMBO,i);
+			if (i == 1) {
+				_stprintf(temp, TEXT("Main Controls"));
+			}
+			else if (i == 2) {
+				_stprintf(temp, TEXT("Quick-Fire Buttons"));
+			}
+			else if (i == 3) {
+				_stprintf(temp, TEXT("Equipment Select"));
+			}
+			else if (i == 4) {
+				_stprintf(temp, TEXT("Menu Controls"));
+			}
+			else {
+				//_stprintf(temp, INPUTCONFIG_JPCOMBO, i);
+				break;
+			}
+
 			SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_ADDSTRING,0,(LPARAM)(LPCTSTR)temp);
 		}
 
-		for(i=6;i<11;i++)
-		{
-			_stprintf(temp,INPUTCONFIG_JPCOMBO INPUTCONFIG_LABEL_CONTROLLER_TURBO_PANEL_MOD,i-5);
-			SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_ADDSTRING,0,(LPARAM)(LPCTSTR)temp);
-		}
+		//for(i=6;i<11;i++)
+		//{
+		//	_stprintf(temp,INPUTCONFIG_JPCOMBO INPUTCONFIG_LABEL_CONTROLLER_TURBO_PANEL_MOD,i-5);
+		//	SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_ADDSTRING,0,(LPARAM)(LPCTSTR)temp);
+		//}
 
 		SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_SETCURSEL,(WPARAM)0,0);
 
@@ -8204,6 +8395,7 @@ switch(msg)
 		return TRUE;
 	case WM_USER+46:
 		// refresh command, for clicking away from a selected field
+
 		index = SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_GETCURSEL,0,0);
 		if(index > 4) index += 3; // skip controllers 6, 7, and 8 in the input dialog
 		set_buttoninfo(index,hDlg);
@@ -8285,6 +8477,7 @@ switch(msg)
 		PostMessage(hDlg,WM_NEXTDLGCTL,0,0);
 		return true;
 	case WM_COMMAND:
+		//printf("\ncommand\n");
 		switch(LOWORD(wParam))
 		{
 		case IDCANCEL:
@@ -8310,6 +8503,8 @@ switch(msg)
 		{
 			case CBN_SELCHANGE:
 				index = SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_GETCURSEL,0,0);
+				//printf("%d\n", index);
+
 				SendDlgItemMessage(hDlg,IDC_JPCOMBO,CB_SETCURSEL,(WPARAM)index,0);
 				if(index > 4) index += 3; // skip controllers 6, 7, and 8 in the input dialog
 				if(index < 8)
@@ -8323,9 +8518,12 @@ switch(msg)
 					EnableWindow(GetDlgItem(hDlg,IDC_JPTOGGLE),FALSE);
 				}
 
+				//SetInputUIText(hDlg, index);
+
 				set_buttoninfo(index,hDlg);
 
 				EnableDisableKeyFields(index,hDlg);
+
 
 				break;
 		}
