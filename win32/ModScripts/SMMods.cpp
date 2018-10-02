@@ -70,6 +70,7 @@ bool XraySMRedesignMode = false;
 bool UseNewControls = false;
 bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
+bool Save2IsNewGamePlus = false;
 
 
 //const char * DefaultConfigPath = "SuperMetroid_GameConfig.txt";
@@ -80,6 +81,7 @@ const string XraySMRedesignModeStr = "XrayMetroidRedesignMode";
 const string UseNewControlsStr = "UseNewControls";
 const string AllowBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
+const string Save2IsNewGamePlusStr = "Save2IsNewGamePlus";
 
 
 
@@ -196,6 +198,18 @@ void ReadGameConfigFromFile(const char * path) {
 			else if (line.find(FalseString) != std::string::npos) {
 				printf("Disabling Quit on Exit\n");
 				QuitOnExit = false;
+			}
+		}
+		if (line.find(Save2IsNewGamePlusStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("Save Slot 2 is New Game Plus\n");
+				Save2IsNewGamePlus = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("Save Slot 2 is NOT New Game Plus\n");
+				Save2IsNewGamePlus = false;
 			}
 		}
 
