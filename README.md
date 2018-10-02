@@ -3,8 +3,6 @@
 
 DISCLAIMER: Super Metroid ROM not included. Google it.
 
-DISCLAIMER 2: This README is designed for someone not TOO familiar with emulation and ROM-Hacking. Sorry if this is too dumbed down for you. Please read the whole thing anyway.
-
 "Super Metroid - PC Edition" is a modified version of the Snex9X emulator (link to their site in section 6) specifically designed for playing Super Metroid and any ROM Hacks based on it. Unlike the vanulla version of the emulator, it makes a handful of improvements and adds some new controls to the game by means of memory manipulation (and the occasional input spoof) during runtime. And since all of this is handled by the emulator's own execution code (no changes, soft or hard, are made to the ROM itself), these improvements can be applied to ANY Super Metroid ROM hack. On top of that, Snes9X already has a number of featured to improve the visuals and sound of the game, and this copy of the emulator is optimized for Super Metroid by default.
 
 
