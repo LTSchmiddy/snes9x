@@ -259,7 +259,10 @@ void SMGameplayControl(uint32 id, bool pressed) {
 
 
 void SMMainLoop() {
-	NewGamePlus_MainLoop();
+	if (Save2IsNewGamePlus) {
+		NewGamePlus_MainLoop();
+	}
+
 
 	if (SaveStationsHeal) {
 		if (AlexGetByteFree(0x7e0998) == 0x07) {
