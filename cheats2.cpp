@@ -944,3 +944,19 @@ int S9xImportCheatsFromDatabase (const char *filename)
 
     return -2; /* No codes */
 }
+
+// Two Functions I added to the end of cheats2.spp to Make SNES Memory Access easier outside of cheats.cpp and cheats2.cpp
+// Not worth putting in their own file because all they do is wrap Get/SetGetByteFree
+
+uint8 AlexGetByteFree(uint32 Address) {
+	return S9xGetByteFree(Address);
+}
+
+uint16 AlexGet2BytesFree(uint32 Address) {
+	return (AlexGetByteFree(Address + 1) << 8) + AlexGetByteFree(Address);
+}
+
+void AlexSetByteFree(uint8 Byte, uint32 Address) {
+	S9xSetByteFree(Byte, Address);
+}
+

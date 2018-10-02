@@ -282,6 +282,14 @@ void S9xSearchForValue (SCheatData *, S9xCheatComparisonType, S9xCheatDataSize, 
 void S9xSearchForAddress (SCheatData *, S9xCheatComparisonType, S9xCheatDataSize, uint32, bool8);
 void S9xOutputCheatSearchResults (SCheatData *);
 
+
+// Two Functions I added to the end of cheats2.spp to Make SNES Memory Access easier outside of cheats.cpp and cheats2.cpp
+// Not worth putting in their own file because all they do is wrap Get/SetGetByteFree
+uint8 AlexGetByteFree(uint32 Address);
+uint16 AlexGet2BytesFree(uint32 Address);
+void AlexSetByteFree(uint8 Byte, uint32 Address);
+
+
 const char * S9xGameGenieToRaw (const char *, uint32 &, uint8 &);
 const char * S9xProActionReplayToRaw (const char *, uint32 &, uint8 &);
 const char * S9xGoldFingerToRaw (const char *, uint32 &, bool8 &, uint8 &, uint8 bytes[3]);

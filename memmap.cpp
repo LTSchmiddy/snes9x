@@ -221,6 +221,8 @@
 #include "display.h"
 #include "sha256.h"
 
+#include "ModScripts/SMMods.h"
+
 #ifndef SET_UI_COLOR
 #define SET_UI_COLOR(r, g, b) ;
 #endif
@@ -1164,6 +1166,8 @@ bool8 CMemory::Init (void)
 
 	PostRomInitFunc = NULL;
 
+
+
 	return (TRUE);
 }
 
@@ -1211,6 +1215,8 @@ void CMemory::Deinit (void)
 
 	Safe(NULL);
 	SafeANK(NULL);
+
+	SMOnEndRom();
 }
 
 // file management and ROM detection
@@ -1380,20 +1386,6 @@ int CMemory::ScoreLoROM (bool8 skip_header, int32 romoff)
 	return (score);
 }
 
-int CMemory::First512BytesCountZeroes() const
-{
-	const uint8 *buf = ROM;
-	int zeroCount = 0;
-	for (int i = 0; i < 512; i++)
-	{
-		if (buf[i] == 0)
-		{
-			zeroCount++;
-		}
-	}
-	return zeroCount;
-}
-
 uint32 CMemory::HeaderRemove (uint32 size, uint8 *buf)
 {
 	uint32	calc_size = (size / 0x2000) * 0x2000;
@@ -1542,13 +1534,21 @@ uint32 CMemory::FileLoader (uint8 *buffer, const char *filename, uint32 maxsize)
 		}
 	}
 
+ //   if (HeaderCount == 0)
+	//	S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "No ROM file header found.");
+ //   else
+ //   if (HeaderCount == 1)
+	//	S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "Found ROM file header (and ignored it).");
+	//else
+	//	S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "Found multiple ROM file headers (and ignored them).");
+
     if (HeaderCount == 0)
-		S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "No ROM file header found.");
+		printf("No ROM file header found.");
     else
     if (HeaderCount == 1)
-		S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "Found ROM file header (and ignored it).");
+		printf("Found ROM file header (and ignored it).");
 	else
-		S9xMessage(S9X_INFO, S9X_HEADERS_INFO, "Found multiple ROM file headers (and ignored them).");
+		printf("Found multiple ROM file headers (and ignored them).");
 
 	return ((uint32) totalSize);
 }
@@ -1578,6 +1578,8 @@ bool8 CMemory::LoadROM (const char *filename)
 
     int32 totalFileSize;
 
+
+
     do
     {
         memset(ROM,0, MAX_ROM_SIZE);
@@ -1591,6 +1593,10 @@ bool8 CMemory::LoadROM (const char *filename)
             CheckForAnyPatch(filename, HeaderCount != 0, totalFileSize);
     }
     while(!LoadROMInt(totalFileSize));
+	// I added this to ensure that the menu bar is hidden whenever a rom is loaded (well, loaded successfully).
+	HideMenu();
+
+	SMOnLoadRom();
 
     return TRUE;
 }
@@ -1604,21 +1610,13 @@ bool8 CMemory::LoadROMInt (int32 ROMfillSize)
 	ExtendedFormat = NOPE;
 
 	int	hi_score, lo_score;
-	int score_headered;
-	int score_nonheadered;
 
 	hi_score = ScoreHiROM(FALSE);
 	lo_score = ScoreLoROM(FALSE);
-	score_nonheadered = max(hi_score, lo_score);
-	score_headered = max(ScoreHiROM(TRUE), ScoreLoROM(TRUE));
 
-	bool size_is_likely_headered = ((ROMfillSize - 512) & 0xFFFF) == 0;
-	if (size_is_likely_headered) { score_headered += 2; } else { score_headered -= 2; }
-	if (First512BytesCountZeroes() >= 0x1E0) { score_headered += 2; } else { score_headered -= 2; }
-
-	bool headered_score_highest = score_headered > score_nonheadered;
-
-	if (HeaderCount == 0 && !Settings.ForceNoHeader && headered_score_highest)
+	if (HeaderCount == 0 && !Settings.ForceNoHeader &&
+		((hi_score >  lo_score && ScoreHiROM(TRUE) > hi_score) ||
+		 (hi_score <= lo_score && ScoreLoROM(TRUE) > lo_score)))
 	{
 		memmove(ROM, ROM + 512, ROMfillSize - 512);
 		ROMfillSize -= 512;
@@ -2802,7 +2800,12 @@ void CMemory::InitROM (void)
 	sprintf(String, "\"%s\" [%s] %s, %s, %s, %s, SRAM:%s, ID:%s, CRC32:%08X",
 		displayName, isChecksumOK ? "checksum ok" : ((Multi.cartType == 4) ? "no checksum" : "bad checksum"),
 		MapType(), Size(), KartContents(), Settings.PAL ? "PAL" : "NTSC", StaticRAMSize(), ROMId, ROMCRC32);
-	S9xMessage(S9X_INFO, S9X_ROM_INFO, String);
+
+	printf(String, "\"%s\" [%s] %s, %s, %s, %s, SRAM:%s, ID:%s, CRC32:%08X",
+		displayName, isChecksumOK ? "checksum ok" : ((Multi.cartType == 4) ? "no checksum" : "bad checksum"),
+		MapType(), Size(), KartContents(), Settings.PAL ? "PAL" : "NTSC", StaticRAMSize(), ROMId, ROMCRC32);
+
+	//S9xMessage(S9X_INFO, S9X_ROM_INFO, String);
 
 	Settings.ForceLoROM = FALSE;
 	Settings.ForceHiROM = FALSE;

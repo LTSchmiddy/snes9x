@@ -189,7 +189,8 @@
   Nintendo Co., Limited and its subsidiary companies.
  ***********************************************************************************/
 
-
+#include <iostream>
+//#include <bitset>
 #include <map>
 #include <set>
 #include <vector>
@@ -203,9 +204,11 @@
 #include "apu/apu.h"
 #include "snapshot.h"
 #include "controls.h"
+#include "cheats.h"
 #include "crosshairs.h"
 #include "movie.h"
 #include "display.h"
+#include "ModScripts/SMMods.h"
 #ifdef NETPLAY_SUPPORT
 #include "netplay.h"
 #endif
@@ -457,6 +460,9 @@ static const int	ptrspeeds[4] = { 1, 1, 4, 8 };
 
 #define S(x)	x
 
+//#define CHECK_BIT(var,pos) ((var) & (1<<(pos)));
+
+
 enum command_numbers
 {
 	THE_COMMANDS,
@@ -486,6 +492,7 @@ static const char * maptypename (int);
 static int32 ApplyMulti (s9xcommand_t *, int32, int16);
 static void do_polling (int);
 static void UpdatePolledMouse (int);
+
 
 
 static string& operator += (string &s, int i)
@@ -1906,8 +1913,136 @@ bool S9xMapButton (uint32 id, s9xcommand_t mapping, bool poll)
 	return (true);
 }
 
+// And this is where the extra controls are applied:
+//
+//uint32 selectBeamButton = 0x81100400;
+//uint32 selectMissilesButton = 0x81100401;
+//uint32 selectSuperMissilesButton = 0x81100402;
+//uint32 selectPowerBombsButton = 0x81100403;
+//uint32 selectGrappleButton = 0x81100404;
+//uint32 selectXrayButton = 0x81100405;
+//
+//uint32 quickXRayButton = 0x81100200;
+//uint32 quickGrappleButton = 0x81100201;
+//uint32 quickMissileButton = 0x81100202;
+//uint32 quickSuperMissileButton = 0x81100203;
+//uint32 quickPowerBombButton = 0x81100204;
+//
+//
+//
+//uint32 quickPowerBombSpecial1Button = 0x81100208;
+//uint32 quickPowerBombSpecial2Button = 0x81100209;
+//uint32 quickPowerBombSpecial3Button = 0x8110020a;
+//uint32 quickPowerBombSpecial4Button = 0x8110020b;
+//
+//
+//bool MainPowerBombButtonWasPressed = false;
+//bool Special1ButtonWasPressed = false;
+//bool Special2ButtonWasPressed = false;
+//bool Special3ButtonWasPressed = false;
+//bool Special4ButtonWasPressed = false;
+//
+//
+//uint32 WeaponMode = 0x7e09d2;
+////uint32 AutoCancelWeaponMode = 0x7e09d2;
+//
+//uint8 oldBeamSet = 0xff;
+//
+//
+//bool doXray = false;
+//uint8 preXray = 0xff;
+//
+//
+//bool doGrapple = false;
+//bool killGrapple = false;
+//uint8 preGrapple = 0xff;
+//
+//bool doQuickMissile = false;
+//bool didQuickMissile = false;
+//uint8 preQuickMissile = 0xff;
+//
+//
+//bool doQuickSuperMissile = false;
+//bool didQuickSuperMissile = false;
+//uint8 preQuickSuperMissile = 0xff;
+//
+//bool doQuickPowerBomb= false;
+//bool didQuickPowerBomb = false;
+//uint8 preQuickPowerBomb = 0xff;
+//
+//bool checkPowerBombButtons(uint32 buttonID) {
+//	//printf("Calling for Power Bomb Check");
+//	if (buttonID == quickPowerBombButton) return true;
+//	else if (buttonID == quickPowerBombSpecial1Button) return true;
+//	else if (buttonID == quickPowerBombSpecial2Button) return true;
+//	else if (buttonID == quickPowerBombSpecial3Button) return true;
+//	else if (buttonID == quickPowerBombSpecial4Button) return true;
+//	else return false;
+//}
+////
+////bool allowedPowerBombControl(uint32 buttonID) {
+////	if (buttonID = currentPowerBombButton) return true;
+////	if (currentPowerBombButton = 0xffffffff) return true;
+////	return false;
+////}
+
+
 void S9xReportButton (uint32 id, bool pressed)
 {
+	//if (AlexGetByteFree(0x7e0998) == 0x08) {
+	//	if (id == 0x81100102 && doXray) {
+	//		pressed = true;
+	//		AlexSetByteFree(0x05, WeaponMode);
+	//	}
+
+	//	if (id == 0x81100100 && doGrapple && !killGrapple) {
+	//		pressed = true;
+	//		AlexSetByteFree(0x04, WeaponMode);
+	//	}
+
+
+	//	else if (id == 0x81100100 && doGrapple && killGrapple) {
+	//		pressed = false;
+
+	//		doGrapple = false;
+	//		if (preGrapple != 0xff) {
+	//			AlexSetByteFree(preGrapple, WeaponMode);
+	//			preGrapple = 0xff;
+	//		}
+
+	//		killGrapple = false;
+	//	}
+
+	//	if (id == 0x81100100 && doQuickMissile) {
+	//		if (!didQuickMissile) {
+	//			pressed = true;
+	//			didQuickMissile = true;
+	//		}
+
+	//		AlexSetByteFree(0x01, WeaponMode);
+	//	}
+
+
+	//	if (id == 0x81100100 && doQuickSuperMissile) {
+	//		if (!didQuickSuperMissile) {
+	//			pressed = true;
+	//			didQuickSuperMissile = true;
+	//		}
+	//		AlexSetByteFree(0x02, WeaponMode);
+	//	}
+
+	//	if (id == 0x81100100 && doQuickPowerBomb) {
+	//		//if (!didQuickPowerBomb) {
+	//		pressed = true;
+	//		didQuickPowerBomb = true;
+	//		//}
+	//		AlexSetByteFree(0x03, WeaponMode);
+	//	}
+
+	//}
+
+	pressed = SMInputUpdate(id, pressed);
+
 	if (keymap.count(id) == 0)
 		return;
 
@@ -1923,11 +2058,18 @@ void S9xReportButton (uint32 id, bool pressed)
 	if (keymap[id].type == S9xButtonCommand)	// skips the "already-pressed check" unless it's a command, as a hack to work around the following problem:
 		if (keymap[id].button_norpt == pressed)	// FIXME: this makes the controls "stick" after loading a savestate while recording a movie and holding any button
 			return;
+	//
+	//if (pressed) {
+	if (AlexGetByteFree(0x7e0998) == 0x08) {
+		SMGameplayControl(id, pressed);
+	}
+	
 
 	keymap[id].button_norpt = pressed;
 
 	S9xApplyCommand(keymap[id], pressed, 0);
 }
+
 
 bool S9xMapPointer (uint32 id, s9xcommand_t mapping, bool poll)
 {

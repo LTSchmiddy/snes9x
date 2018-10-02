@@ -200,6 +200,7 @@
 #include "snapshot.h"
 #include "cheats.h"
 #include "logger.h"
+#include "win32\ModScripts\SMMods.h"
 #ifdef DEBUGGER
 #include "debug.h"
 #endif
@@ -355,4 +356,7 @@ void S9xSoftReset (void)
 		S9xMSU1Init();
 
 	S9xInitCheatData();
+	HideMenu();
+	SMOnLoadRom();
+	
 }

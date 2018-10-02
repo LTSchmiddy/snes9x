@@ -232,6 +232,7 @@ bool8 S9xOpenSnapshotFile (const char *, bool8, STREAM *);
 void S9xCloseSnapshotFile (STREAM);
 const char * S9xStringInput (const char *);
 const char * S9xGetDirectory (enum s9x_getdirtype);
+const char * S9xGetFileInDirectory(const char *, enum s9x_getdirtype);
 const char * S9xGetFilename (const char *, enum s9x_getdirtype);
 const char * S9xGetFilenameInc (const char *, enum s9x_getdirtype);
 const char * S9xChooseFilename (bool8);
