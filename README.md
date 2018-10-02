@@ -1,6 +1,5 @@
-# Snes9x
-*Super Metroid - PC Edition*
-*(a port of Snes9x emulator)*
+# Super Metroid - PC Edition
+*a port of Snes9x emulator*
 
 DISCLAIMER: Super Metroid ROM not included. Google it.
 DISCLAIMER 2: This README is designed for someone not TOO familiar with emulation and ROM-Hacking. Sorry if this is too dumbed down for you. Please read the whole thing anyway.
