@@ -5,7 +5,7 @@ DISCLAIMER: Super Metroid ROM not included. Google it.
 
 "Super Metroid - PC Edition" is a modified version of the Snex9X emulator (link to their site in section 6) specifically designed for playing Super Metroid and any ROM Hacks based on it. Unlike the vanilla version of the emulator, it makes a handful of improvements and adds some new controls to the game by means of memory manipulation (and the occasional input spoof) during runtime. And since all of this is handled by the emulator's own execution code (no changes, soft or hard, are made to the ROM itself), these improvements can be applied to ANY Super Metroid ROM hack. On top of that, Snes9X already has a number of featured to improve the visuals and sound of the game, and this copy of the emulator is optimized for Super Metroid by default.
 
-
+Stable Windows x86 Version: https://drive.google.com/open?id=12Ai91y2wjXhP6eINkqTsqfVZ8vzrrs6G
 
 =====================================================================================================
 
@@ -167,7 +167,7 @@ I've tested this with a number of ROM hacks (including several variants of Proje
 
 ********************************************************************************
 Q: Where can I get your source code? Where are your changes?
-A: I haven't put source code up on GitHub yet, but I will. 
+A: Right here!
 
 The code I've added it mostly contained in the files SMMods.cpp and SMMods.h, and in the directory named ModScripts, along with a slight reworking of the beginning of the program's Main() method, found in wsnes9x.cpp, and some parts of UI-related code also in that file. Everything else is either making certain methods available outside of their origin file, or calls to the methods in SMMods.cpp to make these features work.
 
