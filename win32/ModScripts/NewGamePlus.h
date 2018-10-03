@@ -27,4 +27,16 @@
 #include <ctype.h>
 
 
+
+// External Commands
+bool InNewGameUltraMode();
+
+bool InNewGamePlusMode();
+
+
+// Event Functions
+void NewGamePlus_OnLoadRom(void);
+
 void NewGamePlus_MainLoop(void);
+void NewGamePlus_OnLoadState(void);
+

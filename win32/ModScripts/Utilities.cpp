@@ -76,6 +76,12 @@ int GetSamusMaxHealth() {
 	return AlexGet2BytesFree(SamusMaxHealthSBA);
 }
 
+
+void SetSamusHealth(uint16 val) {
+	AlexSetByteFree(val & 0b0000000011111111, SamusHealthSBA);
+	AlexSetByteFree(val >> 8, SamusHealthSBA + 1);
+}
+
 void SetSamusFullHealth() {
 	AlexSetByteFree(AlexGetByteFree(SamusMaxHealthSBA), SamusHealthSBA);
 	AlexSetByteFree(AlexGetByteFree(SamusMaxHealthSBA + 1), SamusHealthSBA + 1);

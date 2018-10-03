@@ -52,6 +52,8 @@ int GetSamusMaxHealth(void);
 
 void SetSamusFullHealth(void);
 
+void SetSamusHealth(uint16);
+
 
 //Missiles
 int GetSamusMissiles(void);

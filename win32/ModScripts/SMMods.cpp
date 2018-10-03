@@ -108,12 +108,33 @@ void HideMenu() {
 	SetMenu(GUI.hWnd, NULL);
 }
 
+bool SaveStatesAllowed() {
+	if (Save2IsNewGamePlus) {
+		if (InNewGamePlusMode()) {
+			S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are not allowed in New Game Plus.");
+			return false;
+		}
+	}
+
+	if (CheckGameMode() != 0x08) {
+		S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are only available during gameplay.");
+		return false;
+	}
+
+	return true;
+}
+
 // Main Loop Function:
 
 void SMOnLoadRom() {
 	LeftTitleScreen = false;
 	LoadSMGameConfig();
 	SMLastSaveTime = GetP1SavedPlayTimeSeconds();
+
+	if (Save2IsNewGamePlus) {
+		NewGamePlus_OnLoadRom();
+	}
+
 }
 
 void ReadGameConfigFromFile(const char * path) {
@@ -310,5 +331,8 @@ void SMOnEndRom() {
 
 void SMOnLoadState() {
  	SMLastSaveTime = GetP1SavedPlayTimeSeconds();
+	if (Save2IsNewGamePlus) {
+		void NewGamePlus_OnLoadState();
+	}
 }
 

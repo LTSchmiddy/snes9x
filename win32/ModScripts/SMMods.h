@@ -46,6 +46,8 @@ extern bool QuitOnExit;
 
 //Methods:
 void HideMenu(void);
+bool SaveStatesAllowed(void);
+
 void SMOnLoadState(void);
 
 

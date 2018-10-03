@@ -215,6 +215,7 @@
 
 #include "wsnes9x.h"
 #include "ModScripts/SMMods.h"
+#include "ModScripts/Utilities.h"
 #include "win32_sound.h"
 #include "win32_display.h"
 #include "CCGShader.h"
@@ -3852,6 +3853,13 @@ void FreezeUnfreezeSlot(int slot, bool8 freeze)
     char filename[_MAX_PATH + 1];
     char ext[_MAX_EXT + 1];
 
+	if (!SaveStatesAllowed()) {
+		return;
+	}
+
+	slot += (GetCurrentSaveFile() + 1) * 100;
+
+
     snprintf(ext, _MAX_EXT, ".%03d", slot);
     strcpy(filename, S9xGetFilename(ext, SNAPSHOT_DIR));
 
@@ -3878,6 +3886,7 @@ void FreezeUnfreeze (const char *filename, bool8 freeze)
 //		{
 //			diagnostic_freezing = true;
 //		}
+
         S9xFreezeGame (filename);
 //
 //		diagnostic_freezing = false;
