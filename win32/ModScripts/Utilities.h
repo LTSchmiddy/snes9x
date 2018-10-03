@@ -96,6 +96,10 @@ int GetSamusReserveTanks(void);
 int GetSamusMaxReserveTanks(void);
 
 void SetSamusFullReserveTanks(void);
+
+void SetSamusReserveTanks(uint16);
+
+
 // Main Gameplay Code: **********************************************************************
 
 unsigned GetCurrentPlayTimeSeconds(void);

@@ -143,6 +143,16 @@ bool sramsaveLastLoop = false;
 bool toggleChargeBeamPressed = false;
 
 
+bool FirePressed = false;
+bool UpPressed = false;
+
+unsigned SDHoldTimer = 0;
+unsigned SDHoldTimerMax = 120;
+
+unsigned SDCoolDownTimer = 0;
+unsigned SDCoolDownTimerMax = 600;
+
+
 //Methods:
 
 bool NewControlsInputUpdate(uint32 id, bool pressed) {
@@ -336,28 +346,24 @@ bool NewControlsInputUpdate(uint32 id, bool pressed) {
 		//	allowBeamToggling = true;
 		//}
 
-		//if (AllowChargeBeamToggling) {
-		//	if (id == toggleChargeBeam && AlexGetByteFree(0x7E09A9) != 0 && AlexGetByteFree(0x7E09A7) != 0) {
-		//		if (!toggleChargeBeamPressed) {
-		//			AlexSetByteFree(0x00, 0x7E09A7);
-		//		}
-		//		toggleChargeBeamPressed == pressed;
-		//	}
+		if (AllowChargeBeamToggling) {
+			if (id == toggleChargeBeam && AlexGetByteFree(0x7E09A9) != 0 && AlexGetByteFree(0x7E09A7) != 0) {
+				if ((!toggleChargeBeamPressed) && pressed) {
+					AlexSetByteFree(0x00, 0x7E09A7);
+				}
+				toggleChargeBeamPressed == pressed;
+			}
 
-		//	else if (id == toggleChargeBeam && AlexGetByteFree(0x7E09A9) != 0 && AlexGetByteFree(0x7E09A7) == 0) {
-		//		
-		//		if (!toggleChargeBeamPressed) {
-		//			AlexSetByteFree(0x10, 0x7E09A7);
-		//			//AlexSetByteFree(0x00, 0x7E09A7);
-		//		}
-		//		toggleChargeBeamPressed == pressed;
+			else if (id == toggleChargeBeam && AlexGetByteFree(0x7E09A9) != 0 && AlexGetByteFree(0x7E09A7) == 0) {
+				
+				if ((!toggleChargeBeamPressed) && pressed) {
+					AlexSetByteFree(0x10, 0x7E09A7);
+					//AlexSetByteFree(0x00, 0x7E09A7);
+				}
+				toggleChargeBeamPressed == pressed;
 
-		//	}
-
-
-		//}
-
-
+			}
+		}
 	}
 	else {
 		doQuickMorphball = false;
@@ -714,4 +720,40 @@ void NewControlsGameplayInputUpdate(uint32 id, bool pressed) {
 		}
 
 	}
+
+
+	if (id == 0x81100100) {
+		FirePressed = pressed;
+	}
+	if (id == 0x81100108) {
+		UpPressed = pressed;
+	}
+}
+
+void NewControls_Update() {
+	//if (SDCoolDownTimer <= 0) {
+		if (FirePressed && UpPressed && (AlexGetByteFree(0x7E09A7) != 0x00) && (AlexGetByteFree(WeaponMode) == 0x03) && (GetSamusPowerBombs > 0)) {
+			//printf("Event Ready");
+			if (SDHoldTimer >= SDHoldTimerMax) {
+				if (GetSamusHealth() + GetSamusReserveTanks() > 10) {
+					SetSamusHealth(GetSamusHealth() - 1);
+				}
+
+				//SDCoolDownTimer = SDCoolDownTimerMax;
+			}
+			else {
+				SDHoldTimer++;
+			}
+
+		}
+		else {
+			SDHoldTimer = 0;
+		}
+
+	//}
+	//else {
+	//	SDCoolDownTimer--;
+	//}
+
+
 }

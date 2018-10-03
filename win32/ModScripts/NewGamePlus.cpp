@@ -187,7 +187,7 @@ void NewGamePlus_OnLoadRom() {
 
 void NewGamePlus_MainLoop() {
 
-	if (!InNewGamePlusMode) {
+	if (!InNewGamePlusMode()) {
 		LastRegen = 0;
 		return;
 	}
@@ -267,7 +267,9 @@ void NewGamePlus_MainLoop() {
 					if (GetSamusHealth() < GetSamusMaxHealth()) {
 						SetSamusHealth(GetSamusHealth() + MiniBossesDefeated());
 					}
-
+					if (GetSamusHealth() > GetSamusMaxHealth()) {
+						SetSamusHealth(GetSamusMaxHealth());
+					}
 
 				}
 			}
@@ -294,7 +296,7 @@ void NewGamePlus_MainLoop() {
 }
 
 void NewGamePlus_OnLoadState() { 
-	if (!InNewGamePlusMode) {
+	if (!InNewGamePlusMode()) {
 		return;
 	}
 	LastHealth = GetSamusHealth();

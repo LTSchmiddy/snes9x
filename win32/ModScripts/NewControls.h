@@ -71,3 +71,6 @@ extern const uint32 Control_B;
 bool NewControlsInputUpdate(uint32, bool);
 
 void NewControlsGameplayInputUpdate(uint32, bool);
+
+
+void NewControls_Update(void);

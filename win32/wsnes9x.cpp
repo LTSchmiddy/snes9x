@@ -3857,7 +3857,7 @@ void FreezeUnfreezeSlot(int slot, bool8 freeze)
 		return;
 	}
 
-	slot += (GetCurrentSaveFile() + 1) * 100;
+	slot += (GetCurrentSaveFile()) * 100;
 
 
     snprintf(ext, _MAX_EXT, ".%03d", slot);
@@ -8226,7 +8226,7 @@ void SetInputUIText(HWND hDlg, int input) {
 		SetDlgItemText(hDlg, IDC_LABEL_Y, TEXT("Select Power Bombs"));
 		SetDlgItemText(hDlg, IDC_LABEL_L, TEXT("Select Grapple Beam"));
 		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Select X-Ray Scope"));
-		SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_START, TEXT("Toggle Charge Beam"));
 		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);

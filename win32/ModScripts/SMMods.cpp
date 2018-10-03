@@ -66,24 +66,33 @@ int SMLastSaveTime = 0;
 //File Config:
 
 bool SaveStationsHeal = false;
+bool BetterReserveTanks = false;
 bool XraySMRedesignMode = false;
 bool UseNewControls = false;
 bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
 bool Save2IsNewGamePlus = false;
+bool AllowSaveStatesInNewGamePlus = false;
 
 
 //const char * DefaultConfigPath = "SuperMetroid_GameConfig.txt";
 const char * DefaultConfigPathBase = "SuperMetroid_GameConfig.txt";
 //const string ConfigPath = "SuperMetroidConfig.conf";
 const string SaveStationsHealStr = "SaveStationsHeal";
+const string BetterReserveTanksStr = "BetterReserveTanks";
 const string XraySMRedesignModeStr = "XrayMetroidRedesignMode";
 const string UseNewControlsStr = "UseNewControls";
-const string AllowBeamTogglingStr = "AllowChargeBeamToggling";
+const string AllowChargeBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
 const string Save2IsNewGamePlusStr = "Save2IsNewGamePlus";
+const string AllowSaveStatesInNewGamePlusStr = "AllowSaveStatesInNewGamePlus";
 
 
+unsigned LastReserveTanks = 0;
+const unsigned RT_HitDelay = 3600;
+unsigned RT_HitDelayCounter = 0;
+const unsigned RT_FillDelay = 20;
+unsigned RT_FillDelayCounter = 0;
 
 //Function Declairations: ================================================================================================
 void SMGameplayControl(uint32, bool);
@@ -110,7 +119,7 @@ void HideMenu() {
 
 bool SaveStatesAllowed() {
 	if (Save2IsNewGamePlus) {
-		if (InNewGamePlusMode()) {
+		if (InNewGamePlusMode() && !AllowSaveStatesInNewGamePlus) {
 			S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are not allowed in New Game Plus.");
 			return false;
 		}
@@ -133,6 +142,11 @@ void SMOnLoadRom() {
 
 	if (Save2IsNewGamePlus) {
 		NewGamePlus_OnLoadRom();
+	}
+
+	if (BetterReserveTanks) {
+		RT_HitDelayCounter = RT_HitDelay;
+		RT_FillDelayCounter = 0;
 	}
 
 }
@@ -178,6 +192,36 @@ void ReadGameConfigFromFile(const char * path) {
 			else if (line.find(FalseString) != std::string::npos) {
 				SaveStationsHeal = false;
 				printf("Disabling Save Station Healing\n");
+			}
+
+
+		}
+
+		if (line.find(BetterReserveTanksStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				BetterReserveTanks = true;
+				printf("Enabling Better Reserve Tanks\n");
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				BetterReserveTanks = false;
+				printf("Disabling Better Reserve Tanks\n");
+			}
+
+
+		}
+				
+		if (line.find(AllowChargeBeamTogglingStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				AllowChargeBeamToggling = true;
+				printf("Enabling Charge Beam Toggling\n");
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				AllowChargeBeamToggling = false;
+				printf("Disabling Charge Beam Toggling\n");
 			}
 
 
@@ -234,6 +278,19 @@ void ReadGameConfigFromFile(const char * path) {
 			}
 		}
 
+		if (line.find(AllowSaveStatesInNewGamePlusStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("Allowing Save States In New Game Plus\n");
+				AllowSaveStatesInNewGamePlus = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("Disallowing Save States In New Game Plus\n");
+				AllowSaveStatesInNewGamePlus = false;
+			}
+		}
+
 		//if (line.find(AllowBeamTogglingStr) != std::string::npos) {
 		//	printf("Enabling Charge Beam Toggling\n");
 		//	AllowChargeBeamToggling = true;
@@ -284,6 +341,11 @@ void SMMainLoop() {
 		NewGamePlus_MainLoop();
 	}
 
+	if (UseNewControls) {
+		NewControls_Update();
+	}
+
+
 
 	if (SaveStationsHeal) {
 		if (AlexGetByteFree(0x7e0998) == 0x07) {
@@ -300,6 +362,48 @@ void SMMainLoop() {
 ;
 			}
 			SMLastSaveTime = GetP1SavedPlayTimeSeconds();
+		}
+	}
+
+
+	if (BetterReserveTanks) {
+		if (CheckGameMode() == 0x08) {
+
+
+			bool hit = false;
+
+
+			if ((LastReserveTanks > GetSamusReserveTanks())) {
+				hit = true;
+			}
+
+			if (hit) {
+				RT_HitDelayCounter = RT_HitDelay;
+				RT_FillDelayCounter = 0;
+
+			}
+			else {
+				if (RT_HitDelayCounter > 0) {
+					RT_HitDelayCounter--;
+				}
+				else {
+					if (RT_FillDelayCounter > 0) {
+						RT_FillDelayCounter--;
+					}
+					else {
+						RT_FillDelayCounter = RT_FillDelay;
+
+						if (GetSamusReserveTanks() < GetSamusMaxReserveTanks()) {
+							SetSamusReserveTanks(GetSamusReserveTanks() + 1);
+						}
+
+						if (GetSamusReserveTanks() > GetSamusMaxReserveTanks()) {
+							SetSamusReserveTanks(GetSamusMaxReserveTanks());
+						}
+					}
+				}
+			}
+			LastReserveTanks = GetSamusReserveTanks();
 		}
 	}
 }
@@ -334,5 +438,11 @@ void SMOnLoadState() {
 	if (Save2IsNewGamePlus) {
 		void NewGamePlus_OnLoadState();
 	}
+
+	if (BetterReserveTanks) {
+		RT_HitDelayCounter = RT_HitDelay;
+		RT_FillDelayCounter = 0;
+	}
+
 }
 

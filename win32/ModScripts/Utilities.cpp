@@ -166,6 +166,12 @@ void SetSamusFullReserveTanks() {
 	//AlexSetByteFree(AlexGetByteFree(SamusReserveTanksSBA), SamusReserveTanksSBA);
 	//AlexSetByteFree(AlexGetByteFree(SamusMaxReserveTanksSBA + 1), SamusMaxReserveTanksSBA + 1);
 }
+
+void SetSamusReserveTanks(uint16 val) {
+	AlexSetByteFree(val & 0b0000000011111111, SamusReserveTanksSBA);
+	AlexSetByteFree(val >> 8, SamusReserveTanksSBA + 1);
+}
+
 // Main Gameplay Code: **********************************************************************
 
 unsigned CheckGameMode() {
