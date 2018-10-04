@@ -412,7 +412,7 @@ void SMMainLoop() {
 
 
 	if (BetterReserveTanks) {
-		if (CheckGameMode() == 0x08) {
+		if ((CheckGameMode() == 0x08) || (CheckGameMode() == 0x07)) {
 
 
 			bool hit = false;
