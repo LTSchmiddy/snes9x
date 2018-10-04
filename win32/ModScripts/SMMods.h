@@ -53,10 +53,12 @@ extern bool AllowChargeBeamToggling;
 extern bool QuitOnExit;
 extern bool Save2IsNewGamePlus;
 extern bool SSI_AllowSaveStatesInNewGamePlus;
+extern bool SSI_SaveStatesDisabled;
 
 //Methods:
 void HideMenu(void);
-bool SaveStatesAllowed(void);
+int SaveStatesAllowed(void);
+//bool SaveStatesAllowed(void);
 
 void SMOnLoadState(void);
 

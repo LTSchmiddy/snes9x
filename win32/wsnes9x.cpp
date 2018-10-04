@@ -216,6 +216,7 @@
 #include "wsnes9x.h"
 #include "ModScripts/SMMods.h"
 #include "ModScripts/Utilities.h"
+#include "ModScripts/PopupHandler.h"
 #include "win32_sound.h"
 #include "win32_display.h"
 #include "CCGShader.h"
@@ -3855,7 +3856,16 @@ void FreezeUnfreezeSlot(int slot, bool8 freeze)
 
 	if (SaveStateIntegration) {
 
-		if (!SaveStatesAllowed()) {
+		if (SSI_SaveStatesDisabled) {
+			ShowMessage("Save States have been disabled by the GameConfig file.");
+			return;
+		}
+
+		if (SaveStatesAllowed() == 0) {
+			return;
+		}
+		else if ((SaveStatesAllowed() == 2) && freeze) {
+			ShowMessage("Only loading save states is allowed here.");
 			return;
 		}
 
@@ -8230,7 +8240,7 @@ void SetInputUIText(HWND hDlg, int input) {
 		SetDlgItemText(hDlg, IDC_LABEL_Y, TEXT("Select Power Bombs"));
 		SetDlgItemText(hDlg, IDC_LABEL_L, TEXT("Select Grapple Beam"));
 		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Select X-Ray Scope"));
-		SetDlgItemText(hDlg, IDC_LABEL_START, TEXT("Toggle Charge Beam"));
+		SetDlgItemText(hDlg, IDC_LABEL_START, TEXT("Toggle Charge Beam (Experimental)"));
 		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);

@@ -201,7 +201,10 @@
 //#define MY_REG_KEY   "Software\\Emulators\\Snes9X"
 //#define REG_KEY_VER  "1.31"
 
-#define DISCLAIMER_TEXT        TEXT("Snes9X v%s for Windows.\r\n\
+#define DISCLAIMER_TEXT        TEXT("Super Metroid - PC Edition v0.2\r\n\
+Built by LT_Schmiddy - https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public \r\n\
+\r\n\
+Based on Snes9X v%s for Windows.\r\n\
 (c) Copyright 1996 - 2002  Gary Henderson and Jerremy Koot (jkoot@snes9x.com)\r\n\
 (c) Copyright 2002 - 2004  Matthew Kendora\r\n\
 (c) Copyright 2002 - 2005  Peter Bortas\r\n\

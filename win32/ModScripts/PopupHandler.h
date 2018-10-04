@@ -41,6 +41,7 @@ class SMMod_PopupMessage {
 		void InitMessage(const char *, int);
 };
 
+void ShowMessage(const char *);
 void ShowMessage(const char *, int);
 
 void PopupHandler_MainLoop(void);

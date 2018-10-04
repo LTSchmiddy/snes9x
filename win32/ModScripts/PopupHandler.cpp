@@ -61,6 +61,10 @@ void SMMod_PopupMessage::InitMessage(const char * newMessage, int newDelay) {
 
 
 // Event Functions:
+void ShowMessage(const char * newMessageText) { 
+	ShowMessage(newMessageText, 120);
+}
+
 void ShowMessage(const char * newMessageText, int newDelay) { 
 	SMMod_PopupMessage* newMessage = new SMMod_PopupMessage;
 

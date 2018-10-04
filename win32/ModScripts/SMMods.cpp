@@ -75,6 +75,7 @@ bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
 bool Save2IsNewGamePlus = false;
 bool SSI_AllowSaveStatesInNewGamePlus = false;
+bool SSI_SaveStatesDisabled = false;
 
 
 //const char * DefaultConfigPath = "SuperMetroid_GameConfig.txt";
@@ -89,6 +90,7 @@ const string AllowChargeBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
 const string Save2IsNewGamePlusStr = "Save2IsNewGamePlus";
 const string SSI_AllowSaveStatesInNewGamePlusStr = "SSI_AllowSaveStatesInNewGamePlus";
+const string SSI_SaveStatesDisabledStr = "SSI_SaveStatesDisabled";
 
 
 unsigned LastReserveTanks = 0;
@@ -120,24 +122,31 @@ void HideMenu() {
 	SetMenu(GUI.hWnd, NULL);
 }
 
-bool SaveStatesAllowed() {
+int SaveStatesAllowed() {
+//bool SaveStatesAllowed() {
 	if (!SaveStateIntegration) {
-		return true;
+		return 1;
 	}
 
 	if (Save2IsNewGamePlus) {
 		if (InNewGamePlusMode() && !SSI_AllowSaveStatesInNewGamePlus) {
-			S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are not allowed in New Game Plus.");
-			return false;
+			ShowMessage("Save States are not allowed in New Game Plus.");
+			return 0;
 		}
 	}
 
-	if (CheckGameMode() != 0x08) {
-		S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are only available during gameplay.");
-		return false;
+
+	if (CheckGameMode() == 0x1A) {
+		
+		return 2;
 	}
 
-	return true;
+	if (CheckGameMode() != 0x08) {
+		ShowMessage("Save States are only available during gameplay.");
+		return 0;
+	}
+
+	return 1;
 }
 
 // Main Loop Function:
@@ -310,6 +319,21 @@ void ReadGameConfigFromFile(const char * path) {
 				SSI_AllowSaveStatesInNewGamePlus = false;
 			}
 		}
+
+
+		if (line.find(SSI_SaveStatesDisabledStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("SaveStateIntegration: Save States are COMPLETELY disabled\n");
+				SSI_SaveStatesDisabled = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("SaveStateIntegration: Save States are NOT completely disabled\n");
+				SSI_SaveStatesDisabled = false;
+			}
+		}
+
 
 		//if (line.find(AllowBeamTogglingStr) != std::string::npos) {
 		//	printf("Enabling Charge Beam Toggling\n");
