@@ -307,7 +307,7 @@ void NewGamePlus_MainLoop() {
 
 
 
-	if (CheckGameMode() == 0x08) {
+	if ((CheckGameMode() == 0x08) || (CheckGameMode() == 0x07)) {
 		//if (LastHealth == GetSamusHealth()) {
 			//RecheckHealth = false;
 			//LastHealth = GetSamusHealth();
