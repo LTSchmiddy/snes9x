@@ -280,6 +280,7 @@
     <ClInclude Include="ModScripts\NewControls.h" />
     <ClInclude Include="ModScripts\NewGamePlus.h" />
     <ClInclude Include="ModScripts\SMMods.h" />
+    <ClInclude Include="ModScripts\PopupHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\bsx.cpp">
@@ -601,6 +602,7 @@
     <ClCompile Include="ModScripts\NewControls.cpp" />
     <ClCompile Include="ModScripts\NewGamePlus.cpp" />
     <ClCompile Include="ModScripts\SMMods.cpp" />
+    <ClCompile Include="ModScripts\PopupHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="rsrc\nodrop.cur">

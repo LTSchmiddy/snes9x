@@ -37,12 +37,22 @@
 #include <ctype.h>
 
 //Config Variables:
+//extern bool SaveStationsHeal;
+//extern bool XraySMRedesignMode;
+//extern bool UseNewControls;
+//extern bool AllowChargeBeamToggling;
+//extern bool QuitOnExit;
+
+
 extern bool SaveStationsHeal;
+extern bool BetterReserveTanks;
 extern bool XraySMRedesignMode;
 extern bool UseNewControls;
+extern bool SaveStateIntegration;
 extern bool AllowChargeBeamToggling;
 extern bool QuitOnExit;
-
+extern bool Save2IsNewGamePlus;
+extern bool SSI_AllowSaveStatesInNewGamePlus;
 
 //Methods:
 void HideMenu(void);

@@ -3853,11 +3853,15 @@ void FreezeUnfreezeSlot(int slot, bool8 freeze)
     char filename[_MAX_PATH + 1];
     char ext[_MAX_EXT + 1];
 
-	if (!SaveStatesAllowed()) {
-		return;
+	if (SaveStateIntegration) {
+
+		if (!SaveStatesAllowed()) {
+			return;
+		}
+
+		slot += (GetCurrentSaveFile()) * 100;
 	}
 
-	slot += (GetCurrentSaveFile()) * 100;
 
 
     snprintf(ext, _MAX_EXT, ".%03d", slot);

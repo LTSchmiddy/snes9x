@@ -1,6 +1,7 @@
 #include "ModScripts\NewGamePlus.h"
 
 #include "ModScripts\Utilities.h"
+#include "ModScripts\PopupHandler.h"
 
 #include "SMMods.h"
 #include "wsnes9x.h"
@@ -63,6 +64,8 @@ bool RecheckHealth = false;
 unsigned LastRegen = 0;
 unsigned LastDamageMult = 0;
 
+bool OnLoadSlotMessages = false;
+bool OnSlotMenuMessages = false;
 
 bool InNewGameUltraMode() {
 	if (GetCurrentSaveFile() == 2) {
@@ -140,36 +143,91 @@ unsigned BossesDefeated() {
 	return retVal;
 }
 
+unsigned DamageMult() {
+	return (BossesDefeated() * 2) + 2;
+}
+
 void ShowHealthRegenMessage(unsigned regenVal) {
 	//S9X_ROM_INFO,
 	//S9X_HEADERS_INFO,
 	//S9X_CONFIG_INFO,
 	//S9X_TURBO_MODE,
 	//S9X_NETPLAY_NOT_SERVER,
-	if (!InNewGamePlusMode) {
+	if (!InNewGamePlusMode()) {
 		return;
 	}
 
 	if (regenVal == 0) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "No Health Regen");
+		ShowMessage("No Health Regen", 60);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Welcome to New Game Plus.");
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "No Health Regen");
 	} 
 	else if (regenVal == 1) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: 1 per Second");
+		ShowMessage("Health Regen: 1 per Second.", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: 1 per Second.");
 	}
 	else if (regenVal == 2) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: 2 per Second");
+		ShowMessage("Health Regen: 2 per Second.", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: 2 per Second.");
 	}
 	else if (regenVal == 3) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: 3 per Second");
+		ShowMessage("Health Regen: 3 per Second.", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: 3 per Second.");
 	}
 	else if (regenVal == 4) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: 4 per Second");
+		ShowMessage("Health Regen: 4 per Second.", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: 4 per Second.");
 	}
 	else if (regenVal == 5) {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: 5 per Second");
+		ShowMessage("Health Regen: 5 per Second.", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: 5 per Second.");
 	}
 	else {
-		S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Health Regen: More than 5 per Second... Somehow...");
+		ShowMessage("Health Regen: More than 5 per Second... Somehow...", 180);
+		//S9xMessage(S9X_INFO, S9X_TURBO_MODE, "Health Regen: More than 5 per Second... Somehow...");
+	}
+
+}
+
+void ShowDamageMultMessage(unsigned damMultVal) {
+	//S9X_ROM_INFO,
+	//S9X_HEADERS_INFO,
+	//S9X_CONFIG_INFO,
+	//S9X_TURBO_MODE,
+	//S9X_NETPLAY_NOT_SERVER,
+	if (!InNewGameUltraMode()) {
+		return;
+	}
+
+	if (damMultVal <= 2) {
+	
+		ShowMessage("So, we're doing this again...", 180);
+		ShowMessage("You will take 2x damage.", 180);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Welcome to New Game Ultra.		(You will take 2x damage.)");
+	}
+	else if (damMultVal <= 4) {
+		ShowMessage("The Space Pirates are worried...", 180);
+		ShowMessage("You will now take 4x damage.", 180);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "The Space Pirates are getting worried...		(You now take 4x damage.)");
+	}
+	else if (damMultVal <= 6) {
+		ShowMessage("You reflect on the fate of your surrogate home...", 180);
+		ShowMessage("You will now take 6x damage.", 180);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "You reflect on the fate of your surrogate home...		(You now take 6x damage.)");
+	}
+	else if (damMultVal <= 8) {
+		ShowMessage("Mother Brain and Tourian are in a panic...", 180);
+		ShowMessage("You will now take 8x damage.", 180);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Mother Brain and Tourian are in a panic...		(You now take 8x damage.)");
+	}
+	else if (damMultVal <= 10) {
+		ShowMessage("Let's finish this...", 180);
+		ShowMessage("You will now take 10x damage.", 180);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "Let's finish this...		(You now take 10x damage.)");
+	}
+	else {
+		ShowMessage("... Umm, Something went wrong, and you're screwed.		 (Damage Multiplier > 10x. This isn't supposed to happen.)", 60);
+		//S9xMessage(S9X_INFO, S9X_NETPLAY_NOT_SERVER, "... Umm, Something went wrong, and you're screwed.		 (Damage Multiplier > 10x. This isn't supposed to happen.)");
 	}
 
 }
@@ -186,6 +244,26 @@ void NewGamePlus_OnLoadRom() {
 
 
 void NewGamePlus_MainLoop() {
+	
+	if (CheckGameMode() == 0x01) {
+		LastRegen = 0;
+		LastHealth = GetSamusHealth();
+		LastDamageMult = DamageMult();
+	}
+
+	if (CheckGameMode() == 0x04) {
+		if (!OnSlotMenuMessages) {
+			ShowMessage("Save Slot A is Normal Play.", 120);
+			ShowMessage("Save Slot B is New Game Plus.", 120);
+			ShowMessage("Save Slot C is New Game Ultra.", 120);
+
+			OnSlotMenuMessages = true;
+		}
+
+	}
+	else {
+		OnSlotMenuMessages = false;
+	}
 
 	if (!InNewGamePlusMode()) {
 		LastRegen = 0;
@@ -208,19 +286,28 @@ void NewGamePlus_MainLoop() {
 		}
 
 	}
+	
+	
 
-	if (CheckGameMode() == 0x01) {
-		LastRegen = 0;
-		LastHealth = GetSamusHealth();
-	}
+	if (CheckGameMode() == 0x07) {
+		if (!OnLoadSlotMessages) {
+			ShowDamageMultMessage(DamageMult());
+			ShowHealthRegenMessage(MiniBossesDefeated());
+			
+			OnLoadSlotMessages = true;
+		}
 
-	else if (CheckGameMode() == 0x07) {
-		ShowHealthRegenMessage(MiniBossesDefeated());
+		LastDamageMult = DamageMult();
 		LastRegen = MiniBossesDefeated();
 		LastHealth = GetSamusHealth();
 	}
+	else {
+		OnLoadSlotMessages = false;
+	}
 
-	else if (CheckGameMode() == 0x08) {
+
+
+	if (CheckGameMode() == 0x08) {
 		//if (LastHealth == GetSamusHealth()) {
 			//RecheckHealth = false;
 			//LastHealth = GetSamusHealth();
@@ -242,7 +329,7 @@ void NewGamePlus_MainLoop() {
 			//if (!RecheckHealth) {
 
 				if (InNewGameUltraMode()) {
-					SetSamusHealth(LastHealth - ((LastHealth - GetSamusHealth()) * ((BossesDefeated() * 2) + 2)));
+					SetSamusHealth(LastHealth - ((LastHealth - GetSamusHealth()) * (DamageMult())));
 				}
 				else {
 					SetSamusHealth(LastHealth - ((LastHealth - GetSamusHealth()) * StaticDamageMult));
@@ -279,15 +366,25 @@ void NewGamePlus_MainLoop() {
 
 
 		if (MiniBossesDefeated() != LastRegen) {
-			if (HideThisRegenChange) {
-				HideThisRegenChange = false;
-			}
-			else {
-				ShowHealthRegenMessage(MiniBossesDefeated());
-			}
+			//if (HideThisRegenChange) {
+			//	HideThisRegenChange = false;
+			//}
+			//else {
+			ShowHealthRegenMessage(MiniBossesDefeated());
+			//}
 
 		}
 		LastRegen = MiniBossesDefeated();
+
+
+		if (DamageMult() != LastDamageMult) {
+			ShowDamageMultMessage(DamageMult());
+		}
+		LastDamageMult = DamageMult();
+
+
+		
+
 
 	}
 
@@ -300,6 +397,7 @@ void NewGamePlus_OnLoadState() {
 		return;
 	}
 	LastHealth = GetSamusHealth();
+	//LastDamageMult = DamageMult();
 	//RecheckHealth = true;
 	//ShowHealthRegenMessage(MiniBossesDefeated());
 	HitDelayCounter = HitDelay;

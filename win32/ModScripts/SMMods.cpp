@@ -18,6 +18,7 @@
 #include "ModScripts\Utilities.h"
 #include "ModScripts\NewControls.h"
 #include "ModScripts\NewGamePlus.h"
+#include "ModScripts\PopupHandler.h"
 
 #include <iostream>
 //#include <bitset>
@@ -69,10 +70,11 @@ bool SaveStationsHeal = false;
 bool BetterReserveTanks = false;
 bool XraySMRedesignMode = false;
 bool UseNewControls = false;
+bool SaveStateIntegration = false;
 bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
 bool Save2IsNewGamePlus = false;
-bool AllowSaveStatesInNewGamePlus = false;
+bool SSI_AllowSaveStatesInNewGamePlus = false;
 
 
 //const char * DefaultConfigPath = "SuperMetroid_GameConfig.txt";
@@ -82,10 +84,11 @@ const string SaveStationsHealStr = "SaveStationsHeal";
 const string BetterReserveTanksStr = "BetterReserveTanks";
 const string XraySMRedesignModeStr = "XrayMetroidRedesignMode";
 const string UseNewControlsStr = "UseNewControls";
+const string SaveStateIntegrationStr = "SaveStateIntegration";
 const string AllowChargeBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
 const string Save2IsNewGamePlusStr = "Save2IsNewGamePlus";
-const string AllowSaveStatesInNewGamePlusStr = "AllowSaveStatesInNewGamePlus";
+const string SSI_AllowSaveStatesInNewGamePlusStr = "SSI_AllowSaveStatesInNewGamePlus";
 
 
 unsigned LastReserveTanks = 0;
@@ -118,8 +121,12 @@ void HideMenu() {
 }
 
 bool SaveStatesAllowed() {
+	if (!SaveStateIntegration) {
+		return true;
+	}
+
 	if (Save2IsNewGamePlus) {
-		if (InNewGamePlusMode() && !AllowSaveStatesInNewGamePlus) {
+		if (InNewGamePlusMode() && !SSI_AllowSaveStatesInNewGamePlus) {
 			S9xMessage(S9X_INFO, S9X_FREEZE_FILE_INFO, "Save States are not allowed in New Game Plus.");
 			return false;
 		}
@@ -253,6 +260,19 @@ void ReadGameConfigFromFile(const char * path) {
 			}
 		}
 
+		if (line.find(SaveStateIntegrationStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("Enabling SaveState Integration\n");
+				SaveStateIntegration = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("Disabling SaveState Integration\n");
+				SaveStateIntegration = false;
+			}
+		}
+
 		if (line.find(QuitOnExitStr) != std::string::npos) {
 
 			std::getline(infile, line);
@@ -278,16 +298,16 @@ void ReadGameConfigFromFile(const char * path) {
 			}
 		}
 
-		if (line.find(AllowSaveStatesInNewGamePlusStr) != std::string::npos) {
+		if (line.find(SSI_AllowSaveStatesInNewGamePlusStr) != std::string::npos) {
 
 			std::getline(infile, line);
 			if (line.find(TrueString) != std::string::npos) {
-				printf("Allowing Save States In New Game Plus\n");
-				AllowSaveStatesInNewGamePlus = true;
+				printf("SaveStateIntegration: Allowing Save States In New Game Plus\n");
+				SSI_AllowSaveStatesInNewGamePlus = true;
 			}
 			else if (line.find(FalseString) != std::string::npos) {
-				printf("Disallowing Save States In New Game Plus\n");
-				AllowSaveStatesInNewGamePlus = false;
+				printf("SaveStateIntegration: Disallowing Save States In New Game Plus\n");
+				SSI_AllowSaveStatesInNewGamePlus = false;
 			}
 		}
 
@@ -345,6 +365,7 @@ void SMMainLoop() {
 		NewControls_Update();
 	}
 
+	PopupHandler_MainLoop();
 
 
 	if (SaveStationsHeal) {
