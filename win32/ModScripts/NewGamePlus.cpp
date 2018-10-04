@@ -375,8 +375,7 @@ void NewGamePlus_MainLoop() {
 
 		}
 		LastRegen = MiniBossesDefeated();
-
-
+		
 		if (DamageMult() != LastDamageMult) {
 			ShowDamageMultMessage(DamageMult());
 		}
