@@ -70,6 +70,7 @@ bool SaveStationsHeal = false;
 bool BetterReserveTanks = false;
 bool XraySMRedesignMode = false;
 bool UseNewControls = false;
+bool NC_SelfDestruct = false;
 bool SaveStateIntegration = false;
 bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
@@ -85,6 +86,7 @@ const string SaveStationsHealStr = "SaveStationsHeal";
 const string BetterReserveTanksStr = "BetterReserveTanks";
 const string XraySMRedesignModeStr = "XrayMetroidRedesignMode";
 const string UseNewControlsStr = "UseNewControls";
+const string NC_SelfDestructStr = "NC_SelfDestruct";
 const string SaveStateIntegrationStr = "SaveStateIntegration";
 const string AllowChargeBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
@@ -266,6 +268,19 @@ void ReadGameConfigFromFile(const char * path) {
 			else if (line.find(FalseString) != std::string::npos) {
 				printf("Disabling Additional Controls\n");
 				UseNewControls = false;
+			}
+		}
+
+		if (line.find(NC_SelfDestructStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("New Controls: Enabling Self Destruct\n");
+				NC_SelfDestruct = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("New Controls: Disabling Self Destruct\n");
+				NC_SelfDestruct = false;
 			}
 		}
 

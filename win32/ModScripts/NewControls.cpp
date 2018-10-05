@@ -80,6 +80,7 @@ const uint32 Menu_Left = 0x8110080a;
 const uint32 Menu_Right = 0x8110080b;
 const uint32 Menu_A = 0x81100801;
 const uint32 Menu_B = 0x81100802;
+const uint32 Menu_PauseSwitch = 0x81100805;
 
 const uint32 Control_Up = 0x81100108;
 const uint32 Control_Down = 0x81100109;
@@ -87,6 +88,8 @@ const uint32 Control_Left = 0x8110010a;
 const uint32 Control_Right = 0x8110010b;
 const uint32 Control_A = 0x81100101;
 const uint32 Control_B = 0x81100102;
+const uint32 Control_L = 0x81100104;
+const uint32 Control_R = 0x81100105;
 
 bool MainPowerBombButtonWasPressed = false;
 bool Special1ButtonWasPressed = false;
@@ -101,6 +104,7 @@ bool MenuPressed_Left = false;
 bool MenuPressed_Right = false;
 bool MenuPressed_A = false;
 bool MenuPressed_B = false;
+bool MenuPressed_PauseSwitch = false;
 
 // Active Variables:====================================================
 uint32 WeaponMode = 0x7e09d2;
@@ -230,6 +234,10 @@ bool NewControlsInputUpdate(uint32 id, bool pressed) {
 		MenuPressed_B = pressed;
 	}
 
+	else if (id == Menu_PauseSwitch) {
+		MenuPressed_PauseSwitch = pressed;
+	}
+
 	if (AlexGetByteFree(0x7e0998) != 0x08) {
 
 		if (id == Control_Up && MenuPressed_Up) {
@@ -255,6 +263,20 @@ bool NewControlsInputUpdate(uint32 id, bool pressed) {
 
 		if (id == Control_B && MenuPressed_B) {
 			pressed = true;
+		}
+
+		//if (id == Control_R && MenuPressed_PauseSwitch) {
+		//	pressed = true;
+		//}
+		
+		if ((MenuPressed_PauseSwitch) && (CheckGameMode() == 0x0F)) {
+			if ((CheckWhichPauseScreen() == 0x00) && (id == Control_R)) {
+				pressed = true;
+			}
+			else if ((CheckWhichPauseScreen() == 0x01) && (id == Control_L)) {
+				pressed = true;
+			}
+
 		}
 
 	}
@@ -731,29 +753,23 @@ void NewControlsGameplayInputUpdate(uint32 id, bool pressed) {
 }
 
 void NewControls_Update() {
-	//if (SDCoolDownTimer <= 0) {
-		if (FirePressed && UpPressed && (AlexGetByteFree(0x7E09A7) != 0x00) && (AlexGetByteFree(WeaponMode) == 0x03) && (GetSamusPowerBombs > 0)) {
-			//printf("Event Ready");
-			if (SDHoldTimer >= SDHoldTimerMax) {
-				if (GetSamusHealth() + GetSamusReserveTanks() > 10) {
-					SetSamusHealth(GetSamusHealth() - 1);
+	if (NC_SelfDestruct) {
+		if (CheckGameMode() == 0x08) {
+			if (FirePressed && UpPressed && (AlexGetByteFree(0x7E09A7) != 0x00) && (AlexGetByteFree(WeaponMode) == 0x03) && (GetSamusPowerBombs > 0)) {
+				if (SDHoldTimer >= SDHoldTimerMax) {
+					if ((GetSamusHealth() > 10) || (GetSamusReserveTanks() != 0)) {
+						SetSamusHealth(GetSamusHealth() - 1);
+					}
+
+				}
+				else {
+					SDHoldTimer++;
 				}
 
-				//SDCoolDownTimer = SDCoolDownTimerMax;
 			}
 			else {
-				SDHoldTimer++;
+				SDHoldTimer = 0;
 			}
-
 		}
-		else {
-			SDHoldTimer = 0;
-		}
-
-	//}
-	//else {
-	//	SDCoolDownTimer--;
-	//}
-
-
+	}
 }

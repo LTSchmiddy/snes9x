@@ -178,6 +178,9 @@ unsigned CheckGameMode() {
 	return AlexGetByteFree(0x7e0998);
 }
 
+unsigned CheckWhichPauseScreen() {
+	return AlexGetByteFree(0x7E0727);
+}
 
 unsigned GetCurrentPlayTimeSeconds() {
 	//Seconds + Minutes + Hours:

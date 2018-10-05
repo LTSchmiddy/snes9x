@@ -112,6 +112,8 @@ bool GetIceBeamEquipped(void);
 
 unsigned CheckGameMode(void);
 
+unsigned CheckWhichPauseScreen(void);
+
 unsigned GetCurrentSaveFile(void);
 
 // P1 Save Data:

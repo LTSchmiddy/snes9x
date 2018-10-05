@@ -8228,7 +8228,28 @@ void SetInputUIText(HWND hDlg, int input) {
 	SetDlgItemText(hDlg, IDC_CANCEL, BUTTON_CANCEL);
 	SetDlgItemText(hDlg, IDC_LABEL_BLUE, INPUTCONFIG_LABEL_BLUE);
 
-	if (input == 2) {
+
+
+	if (input == 3) {
+		SetDlgItemText(hDlg, IDC_LABEL_UP, TEXT("Menu Up"));
+		SetDlgItemText(hDlg, IDC_LABEL_DOWN, TEXT("Menu Down"));
+		SetDlgItemText(hDlg, IDC_LABEL_LEFT, TEXT("Menu Left"));
+		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, TEXT("Menu Right"));
+		SetDlgItemText(hDlg, IDC_LABEL_A, TEXT("Confirm"));
+		SetDlgItemText(hDlg, IDC_LABEL_B, TEXT("Back/Cancel"));
+		SetDlgItemText(hDlg, IDC_LABEL_X, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_Y, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_L, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_R, TEXT("Switch Between Map and Status Screens"));
+		SetDlgItemText(hDlg, IDC_LABEL_START, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_SELECT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_UPLEFT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNRIGHT, INPUTCONFIG_LABEL_UNUSED);
+		SetDlgItemText(hDlg, IDC_LABEL_DOWNLEFT, INPUTCONFIG_LABEL_UNUSED);
+
+	}
+	else if (input == 2) {
 		SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UNUSED);
 		//EnableWindow(GetDlgItem(hDlg, IDC_LABEL_UP), FALSE);
 		SetDlgItemText(hDlg, IDC_LABEL_DOWN, INPUTCONFIG_LABEL_UNUSED);
