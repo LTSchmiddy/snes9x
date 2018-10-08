@@ -88,43 +88,43 @@ Below is a list of all of the default controls for the game, including the new o
 (I plan on making a fix for that in a later version)
 
 
-**** Vanilla Controls ****
+**** Vanilla Controls ****<br/>
 Movement: WASD <br/>
-Jump: Space Bar
-Fire: J
-Dash: Left Shift
-Aim Up: K
-Aim Down: L
-Item Switch: , [Comma]
-Item Cancel: . [Period]
-Map/Status Screen: Tab
+Jump: Space Bar<br/>
+Fire: J<br/>
+Dash: Left Shift<br/>
+Aim Up: K<br/>
+Aim Down: L<br/>
+Item Switch: , [Comma]<br/>
+Item Cancel: . [Period]<br/>
+Map/Status Screen: Tab<br/>
 
 
-**** New Controls ****
-Quick-Fire Missiles: M
-Quick-Fire Super Missiles: N
-Quick-Fire Power-Bombs: E
-Quick-Fire Grapple Beam: H
-Quick-Fire X-Ray Scope: Q
-Quick Morph Ball: Left Control
+**** New Controls ****<br/>
+Quick-Fire Missiles: M<br/>
+Quick-Fire Super Missiles: N<br/>
+Quick-Fire Power-Bombs: E<br/>
+Quick-Fire Grapple Beam: H<br/>
+Quick-Fire X-Ray Scope: Q<br/>
+Quick Morph Ball: Left Control<br/>
 
-Quick-Fire Wave Beam Combo: U [Hold] 
-Quick-Fire Ice Beam Combo: I [Hold] 
-Quick-Fire Spazer Beam Combo: O [Hold] 
-Quick-Fire Plasma Beam Combo: P [Hold] 
+Quick-Fire Wave Beam Combo: U [Hold] <br/>
+Quick-Fire Ice Beam Combo: I [Hold] <br/>
+Quick-Fire Spazer Beam Combo: O [Hold] <br/>
+Quick-Fire Plasma Beam Combo: P [Hold] <br/>
 
 Select Beam: 1 <br/>
-Select Missiles: 2 
-Select Super Missiles: 3 
-Select Power-Bombs: 4 
-Select Grapple Beam: R 
-Select X-Ray Scope: F 
+Select Missiles: 2 <br/>
+Select Super Missiles: 3 <br/>
+Select Power-Bombs: 4 <br/>
+Select Grapple Beam: R <br/>
+Select X-Ray Scope: F <br/>
 
 
-Menu - Navigate: Arrow Keys
-Menu - Select/Confirm: Enter
-Menu - Back/Cancel: Backspace
-Menu - Switch Between Map and Status Screens: Right Shift
+Menu - Navigate: Arrow Keys<br/>
+Menu - Select/Confirm: Enter<br/>
+Menu - Back/Cancel: Backspace<br/>
+Menu - Switch Between Map and Status Screens: Right Shift<br/>
 
 
 Pause Game: Escape (Not in menus)
@@ -137,6 +137,7 @@ You don't need to use/enable all of these controls, however. They're just there 
 
 
 B) SAVE STATIONS HEAL YOU:
+
 Something of a gripe with vanilla Super Metroid was how you could save with little to zero health, and be stuck in a perpetual cycle of dying in a difficult area outside (not to mention, state saves give me very little reason to use the vanilla save stations). I've added the ability for save stations to heal you to 100% health. However, this does not trump the vanilla energy stations, as save stations will not fill your reserve tanks. This feature works by monitoring the SRAM for certain changes (specifically, the total play time for your file).
 
 Due to compatability issues with ROM hacks that alter how much space each save slot needs, this feature only works for save file 1. That being said, it should work with any ROM Hack.
