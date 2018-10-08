@@ -51,11 +51,13 @@ For the record, I'm not new to the world of emulation for retro-games, having a 
 Ok, enough with the background info. 
 
 ************************************
+
 "Super Metroid - PC Edition" is a modified version of the Snex9X emulator (link to their site in section 6) specifically designed for playing Super Metroid and any ROM Hacks based on it. Unlike the vanilla version of the emulator, it makes a handful of improvements and adds some new controls to the game by means of memory manipulation (and the occasional input spoof) during runtime. And since all of this is handled by the emulator's own execution code (no changes, soft or hard, are made to the ROM itself), these improvements can be applied to ANY Super Metroid ROM hack. On top of that, Snes9X already has a number of featured to improve the visuals and sound of the game, and this copy of the emulator is optimized for Super Metroid by default.
 
 =====================================================================================================
 
 ===== 2) Features ===================================================================================
+
 So, exactly what does "Super Metroid - PC Edition" have to offer?
 
 Each major feature listed below can be enabled or disabled in a special config file. More on that later.
@@ -82,6 +84,7 @@ The Escape key is now the pause/resume emulation button. The window's menu bar w
 
 
 ******
+
 Below is a list of all of the default controls for the game, including the new ones I've added:
 
 (Note, This table assumes that you haven't changed the in-game controls. If you have, you'll need to set them back to default for any of this to work.)
@@ -246,8 +249,8 @@ The current flags are:
 
 'SSI_AllowSaveStatesInNewGamePlus' - Currently, only recommended for development purposes. Allows Save States to be used in New Game Plus and New Game Ultra.
 
-
 ******
+
 There mey be some flags for experimental features that I'm still working on. They will be marked properly, and you should really leave these off, as some of them WILL break the game and none of them work properly yet.
 
 If a flag is never found, the associated feature will be disabled.
@@ -264,7 +267,7 @@ Everything else works the same way it does in normal Snes9X.
 
 ===== 4) QIAWBFAIIDATH (Questions I Assume Will Be Frequently Asked If I Don't Answer Them Here) ====
 
-********************************************************************************
+********************************************************************************<br/>
 Q: What ROMs is this compatable with?
 A: Most any Super Metroid ROM hack should work, so long as it doesn't alter the primary functionality of the SNES controls (sorry, 'Control Freak'), Also the hack shouldn't change the location of samus's health, ammo, play time, and weapon/equipment info in the RAM or SRAM. Because doing any of these would be a horrible idea when making a ROM Hack, most hacks should work in this emulator.
 
@@ -272,7 +275,7 @@ I've tested this with a number of ROM hacks (including several variants of Proje
 
 ... Oh, also, in case this isn't obvious: don't try to use a non-Super-Metroid-based ROM with this emulator. Most of the time, nothing will happen. The most of these special features don't do anything unless the byte at address 0x7E0998 (the byte that determines Super Metroid's current state) of the SNES's RAM is set to 0x08 (indicating that we're in normal gameplay, and not some menu or something). If a different game sets this byte to that value, I have no idea what will happen.
 
-********************************************************************************
+********************************************************************************<br/>
 Q: Where can I get your source code? Where are your changes?
 A: Right Here.
 
@@ -280,7 +283,7 @@ The code I've added it mostly contained in the files SMMods.cpp and SMMods.h, an
 
 If people are interested, I could put in a programmer's API/Documentation at some point.
 
-********************************************************************************
+********************************************************************************<br/>
 Q: Does this work on Mac/Linux?
 A: It could at some point. But not as of yet. Once I'm confident that the windows version is stable and is fully functional, then I'll consider other platforms.
 
