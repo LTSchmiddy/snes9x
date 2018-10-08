@@ -12,11 +12,11 @@ DISCLAIMER 3: This README is designed for someone not TOO familiar with emulatio
 
 ********************************************************
 
-Download Latest Stable Build:
+Download Latest Stable Build:<br/>
 https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/blob/master/Binary%20Archives/Super%20Metroid%20-%20PC%20Edition%20v0_2.zip
 
 
-All/Previous Versions:
+All/Previous Versions:<br/>
 https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/tree/master/Binary%20Archives
 
 
