@@ -8250,8 +8250,7 @@ void SetInputUIText(HWND hDlg, int input) {
 
 	}
 	else if (input == 2) {
-		SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UNUSED);
-		//EnableWindow(GetDlgItem(hDlg, IDC_LABEL_UP), FALSE);
+		SetDlgItemText(hDlg, IDC_LABEL_UP, INPUTCONFIG_LABEL_UNUSED);;
 		SetDlgItemText(hDlg, IDC_LABEL_DOWN, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_LEFT, INPUTCONFIG_LABEL_UNUSED);
 		SetDlgItemText(hDlg, IDC_LABEL_RIGHT, INPUTCONFIG_LABEL_UNUSED);
