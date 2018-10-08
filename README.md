@@ -17,8 +17,6 @@ DISCLAIMER 3: This README is designed for someone not TOO familiar with emulatio
 
 <a href="https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/tree/master/Binary%20Archives" >All/Previous Versions</a>
 <br/>
-<br/>
-
 
 
 =====================================================================================================
