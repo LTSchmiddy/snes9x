@@ -240,9 +240,23 @@ void ArmWaveBeam(bool on) {
 
 }
 
+bool GetWaveBeamCollected() {
+	return checkBit(AlexGetByteFree(0x7e09A8), 0);
+}
+
 bool GetIceBeamCollected() {
 	return checkBit(AlexGetByteFree(0x7e09A8), 1);
 }
+
+bool GetSpazerBeamCollected() {
+	return checkBit(AlexGetByteFree(0x7e09A8), 2);
+}
+
+bool GetPlasmaBeamCollected() {
+	return checkBit(AlexGetByteFree(0x7e09A8), 3);
+}
+
+
 
 bool GetIceBeamEquipped() {
 	return checkBit(AlexGetByteFree(0x7e09A6), 1) && checkBit(AlexGetByteFree(0x7e09A8), 1);

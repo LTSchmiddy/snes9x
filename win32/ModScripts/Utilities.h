@@ -106,9 +106,19 @@ unsigned GetCurrentPlayTimeSeconds(void);
 
 unsigned GetP1SavedPlayTimeSeconds(void);
 
+
+bool GetWaveBeamCollected(void);
+
 bool GetIceBeamCollected(void);
 
+bool GetSpazerBeamCollected(void);
+
+bool GetPlasmaBeamCollected(void);
+
+
+
 bool GetIceBeamEquipped(void);
+
 
 unsigned CheckGameMode(void);
 
