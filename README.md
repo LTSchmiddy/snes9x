@@ -12,7 +12,7 @@ DISCLAIMER 3: This README is designed for someone not TOO familiar with emulatio
 
 ********************************************************
 
-<a href="https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/releases">Download Latest Stable Build</a>
+<a href="https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/releases ">Download Latest Stable Build</a>
 
 
 <a href="https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/tree/master/Binary%20Archives" >All/Previous Versions</a>
@@ -267,7 +267,7 @@ Everything else works the same way it does in normal Snes9X.
 ===== 4) QIAWBFAIIDATH (Questions I Assume Will Be Frequently Asked If I Don't Answer Them Here) ====
 
 ********************************************************************************<br/>
-Q: What ROMs is this compatable with?
+*Q: What ROMs is this compatable with?<br/>*
 A: Most any Super Metroid ROM hack should work, so long as it doesn't alter the primary functionality of the SNES controls (sorry, 'Control Freak'), Also the hack shouldn't change the location of samus's health, ammo, play time, and weapon/equipment info in the RAM or SRAM. Because doing any of these would be a horrible idea when making a ROM Hack, most hacks should work in this emulator.
 
 I've tested this with a number of ROM hacks (including several variants of Project Base), and I haven't had any problems yet. If you encounter any, lemme know. I want this emulator to work with as many ROM hacks as possible, so I'll usually be glad to include options and patches for other hacks.
@@ -275,7 +275,7 @@ I've tested this with a number of ROM hacks (including several variants of Proje
 ... Oh, also, in case this isn't obvious: don't try to use a non-Super-Metroid-based ROM with this emulator. Most of the time, nothing will happen. The most of these special features don't do anything unless the byte at address 0x7E0998 (the byte that determines Super Metroid's current state) of the SNES's RAM is set to 0x08 (indicating that we're in normal gameplay, and not some menu or something). If a different game sets this byte to that value, I have no idea what will happen.
 
 ********************************************************************************<br/>
-Q: Where can I get your source code? Where are your changes?
+*Q: Where can I get your source code? Where are your changes?<br/>*
 A: Right Here.
 
 The code I've added it mostly contained in the files SMMods.cpp and SMMods.h, and in the directory named ModScripts, along with a slight reworking of the beginning of the program's Main() method, found in wsnes9x.cpp, and some parts of UI-related code also in that file. Everything else is either making certain methods available outside of their origin file, or calls to the methods in SMMods.cpp to make these features work.
@@ -283,7 +283,7 @@ The code I've added it mostly contained in the files SMMods.cpp and SMMods.h, an
 If people are interested, I could put in a programmer's API/Documentation at some point.
 
 ********************************************************************************<br/>
-Q: Does this work on Mac/Linux?
+*Q: Does this work on Mac/Linux?<br/>*
 A: It could at some point. But not as of yet. Once I'm confident that the windows version is stable and is fully functional, then I'll consider other platforms.
 
 ********************************************************************************
