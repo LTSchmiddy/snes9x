@@ -89,7 +89,7 @@ Below is a list of all of the default controls for the game, including the new o
 
 
 **** Vanilla Controls ****
-Movement: WASD
+Movement: WASD <br/>
 Jump: Space Bar
 Fire: J
 Dash: Left Shift
@@ -113,7 +113,7 @@ Quick-Fire Ice Beam Combo: I [Hold]
 Quick-Fire Spazer Beam Combo: O [Hold] 
 Quick-Fire Plasma Beam Combo: P [Hold] 
 
-Select Beam: 1
+Select Beam: 1 <br/>
 Select Missiles: 2 
 Select Super Missiles: 3 
 Select Power-Bombs: 4 
