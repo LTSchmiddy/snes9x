@@ -10,8 +10,18 @@ DISCLAIMER 2: Super Metroid ROM not included. Google it.
 
 DISCLAIMER 3: This README is designed for someone not TOO familiar with emulation and ROM-Hacking. Sorry if this is too dumbed down for you. Please read the whole thing anyway.
 
+********************************************************
+
+Download Latest Stable Build:
+https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/blob/master/Binary%20Archives/Super%20Metroid%20-%20PC%20Edition%20v0_2.zip
+
+
+All/Previous Versions:
+https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public/tree/master/Binary%20Archives
+
+
 =====================================================================================================
-Date of Readme: 10/4/2018
+Date of Readme: 10/8/2018
 
 Table of Contents:
 
