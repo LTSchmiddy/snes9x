@@ -49,6 +49,7 @@ extern bool BetterReserveTanks;
 extern bool XraySMRedesignMode;
 extern bool UseNewControls;
 extern bool NC_SelfDestruct;
+extern bool NC_PBQuickMorph;
 extern bool SaveStateIntegration;
 extern bool AllowChargeBeamToggling;
 extern bool QuitOnExit;

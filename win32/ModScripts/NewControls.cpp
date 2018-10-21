@@ -341,16 +341,21 @@ bool NewControlsInputUpdate(uint32 id, bool pressed) {
 		}
 
 		if (doQuickMorphball) {
-			if (id == 0x81100108) {
+			if (id == Control_Up) {
 				pressed = false;
 			}
 
 
-			if (id == 0x81100109) {
+			if (id == Control_Down) {
 
 				doQuickMorphballSwitcher = !doQuickMorphballSwitcher;
 
 				pressed = doQuickMorphballSwitcher;
+
+			}
+
+			if (NC_PBQuickMorph && (id == Control_L)) {
+				pressed = true;
 
 			}
 

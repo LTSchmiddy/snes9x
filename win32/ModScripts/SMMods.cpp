@@ -71,6 +71,7 @@ bool BetterReserveTanks = false;
 bool XraySMRedesignMode = false;
 bool UseNewControls = false;
 bool NC_SelfDestruct = false;
+bool NC_PBQuickMorph = false;
 bool SaveStateIntegration = false;
 bool AllowChargeBeamToggling = false;
 bool QuitOnExit = false;
@@ -87,6 +88,7 @@ const string BetterReserveTanksStr = "BetterReserveTanks";
 const string XraySMRedesignModeStr = "XrayMetroidRedesignMode";
 const string UseNewControlsStr = "UseNewControls";
 const string NC_SelfDestructStr = "NC_SelfDestruct";
+const string NC_PBQuickMorphStr = "NC_PBQuickMorph";
 const string SaveStateIntegrationStr = "SaveStateIntegration";
 const string AllowChargeBeamTogglingStr = "AllowChargeBeamToggling";
 const string QuitOnExitStr = "QuitOnExit";
@@ -281,6 +283,21 @@ void ReadGameConfigFromFile(const char * path) {
 			else if (line.find(FalseString) != std::string::npos) {
 				printf("New Controls: Disabling Self Destruct\n");
 				NC_SelfDestruct = false;
+			}
+		}
+
+		
+
+		if (line.find(NC_PBQuickMorphStr) != std::string::npos) {
+
+			std::getline(infile, line);
+			if (line.find(TrueString) != std::string::npos) {
+				printf("New Controls: Enabling Project Base Quick Morph\n");
+				NC_PBQuickMorph = true;
+			}
+			else if (line.find(FalseString) != std::string::npos) {
+				printf("New Controls: Disabling Project Base Quick Morph\n");
+				NC_PBQuickMorph = false;
 			}
 		}
 
