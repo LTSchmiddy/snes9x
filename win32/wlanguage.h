@@ -201,7 +201,7 @@
 //#define MY_REG_KEY   "Software\\Emulators\\Snes9X"
 //#define REG_KEY_VER  "1.31"
 
-#define DISCLAIMER_TEXT        TEXT("Super Metroid - PC Edition v0.2\r\n\
+#define DISCLAIMER_TEXT        TEXT("Super Metroid - PC Edition v0.2.2\r\n\
 Built by LT_Schmiddy - https://github.com/LTSchmiddy/super-metroid-pc-edition-snex9x-public \r\n\
 \r\n\
 Based on Snes9X v%s for Windows.\r\n\
@@ -222,7 +222,7 @@ up-to-the-minute information and help on Snes9X.\r\n\r\n\
 Nintendo is a trade mark.")
 
 
-#define APP_NAME TEXT("Snes9x")
+#define APP_NAME TEXT("Super Metroid - PC Edition")
 // possible global strings
 #define SNES9X_INFO TEXT("Snes9x: Information")
 #define SNES9X_WARN TEXT("Snes9x: WARNING!")

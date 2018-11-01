@@ -85,6 +85,16 @@ bool InNewGamePlusMode() {
 	return false;
 }
 
+bool StartingNewGame() {
+	if (!(GetCurrentPlayTimeSeconds() < 1)) {
+		return false;
+	}
+	
+	return true;
+
+
+}
+
 unsigned MiniBossesDefeated() {
 	unsigned retVal = 0;
 
@@ -271,15 +281,22 @@ void NewGamePlus_MainLoop() {
 	}
 
 	// Starting a New Game Plus Save:
-	if (GetCurrentPlayTimeSeconds() < 1) {
-		SetSamusMissiles(GetP1SavedMaxMissiles());
-		SetSamusMaxMissiles(GetP1SavedMaxMissiles());
+	if (StartingNewGame()) {
 
-		SetSamusSuperMissiles(GetP1SavedMaxSuperMissiles());
-		SetSamusMaxSuperMissiles(GetP1SavedMaxSuperMissiles());
+		if (GetSamusMaxPowerBombs() == 0) {
+			SetSamusPowerBombs(GetP1SavedMaxPowerBombs());
+			SetSamusMaxPowerBombs(GetP1SavedMaxPowerBombs());
+		}
 
-		SetSamusPowerBombs(GetP1SavedMaxPowerBombs());
-		SetSamusMaxPowerBombs(GetP1SavedMaxPowerBombs());
+		if (GetSamusMaxSuperMissiles() == 0) {
+			SetSamusSuperMissiles(GetP1SavedMaxSuperMissiles());
+			SetSamusMaxSuperMissiles(GetP1SavedMaxSuperMissiles());
+		}
+
+		if (GetSamusMaxMissiles() == 0) {
+			SetSamusMissiles(GetP1SavedMaxMissiles());
+			SetSamusMaxMissiles(GetP1SavedMaxMissiles());
+		}
 
 		for (unsigned i = 0; i < 8; i++) {
 			AlexSetByteFree(AlexGetByteFree(P1SaveEquipmentStart + i), RAMEquipmentStart + i);
